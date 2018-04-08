@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
+<!-- 2017-06-20T16:14:59 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GeradosAutomaticamente" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="609ce4b2-4484-46a8-a70a-7e64b2ac7a6c">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="JUSNUM"/>
+	<style name="Linha">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[($V{REPORT_COUNT} % 2) == 0]]></conditionExpression>
+			<style backcolor="#B9DFFA"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="competencia" class="java.lang.String"/>
+	<parameter name="sg_secao" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT DADOS.SG_SECAO AS SIGLA_CARTORIO, 
+              DADOS.DAT_REFERENCIA AS DT_REFERENCIA, 
+              INDIC.DES_INDICADOR AS INDICADOR, 
+              DADOS.NR_PROT AS PROTOCOLO               
+              FROM DW_CNJ.CNJ_DADOS DADOS 
+              INNER JOIN DW_CNJ.CNJ_INDICADORES INDIC ON INDIC.COD_INDICADOR = DADOS.COD_INDICADOR 
+              INNER JOIN JN_CARTORIO CARTORIO ON CARTORIO.SIGLA = DADOS.SG_SECAO 
+WHERE TO_CHAR(DADOS.DAT_REFERENCIA, 'YYYYMM') =   $P{competencia} 
+AND DADOS.SG_SECAO =  $P{sg_secao} 
+AND INDIC.COD_INDICADOR IN (20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 
+33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44) 
+ORDER BY CARTORIO.ID, INDIC.DES_INDICADOR, DADOS.NR_PROT]]>
+	</queryString>
+	<field name="SIGLA_CARTORIO" class="java.lang.String"/>
+	<field name="DT_REFERENCIA" class="java.sql.Timestamp"/>
+	<field name="INDICADOR" class="java.lang.String"/>
+	<field name="PROTOCOLO" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement x="117" y="10" width="332" height="30" uuid="8c48cb5c-78dc-4092-9991-71480d73e036"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20"/>
+				</textElement>
+				<text><![CDATA[Valores Gerados Automaticamente]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="45" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<line>
+				<reportElement x="0" y="39" width="560" height="1" uuid="6ed868d2-4447-427d-a4ca-139a3eb6e9cb"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="26" width="110" height="14" uuid="93dc104c-3945-41bb-9ba1-977df285dd17"/>
+				<text><![CDATA[Cartório]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="114" y="26" width="110" height="14" uuid="0f9bf02d-f8a3-4e09-b6db-bf3b56735de4"/>
+				<text><![CDATA[Competência]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="230" y="26" width="243" height="14" uuid="b379a344-4421-4095-8ee9-c78225163936"/>
+				<text><![CDATA[Indicador]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="473" y="26" width="77" height="14" uuid="4da7c38b-b22f-4145-8818-c94697f6f84d"/>
+				<text><![CDATA[Protocolo]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="40" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<frame>
+				<reportElement style="Linha" mode="Opaque" x="0" y="0" width="560" height="29" uuid="5fa1bba6-1f2c-45ed-8499-0df64f3d6847"/>
+				<textField>
+					<reportElement x="5" y="0" width="109" height="21" uuid="5b287832-fb36-4ee3-9662-49d7bc2a36ae"/>
+					<textFieldExpression><![CDATA[$F{SIGLA_CARTORIO}]]></textFieldExpression>
+				</textField>
+				<textField pattern="MM/yyyy">
+					<reportElement x="117" y="0" width="109" height="21" uuid="bf469f5b-1441-4e01-970d-87d0b5d1682a"/>
+					<textFieldExpression><![CDATA[$F{DT_REFERENCIA}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="226" y="0" width="244" height="29" uuid="fc0c1f19-f689-444a-a870-be86fbc67673"/>
+					<textFieldExpression><![CDATA[$F{INDICADOR}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="470" y="0" width="89" height="21" uuid="db13037d-79c2-4340-a05b-c46bd930f7de"/>
+					<textFieldExpression><![CDATA[$F{PROTOCOLO}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="560" height="1" uuid="04637624-a84d-48be-98ec-f151360776b6"/>
+			</line>
+		</band>
+	</pageFooter>
+</jasperReport>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="IndicadoresEObservacoes" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" whenResourceMissingType="Empty" uuid="fa33183a-944d-46c1-93d4-f4ab6c6e7d06">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="JUSNUM"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="idEnvioXml" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[select (select count(*) 
+    from jn_envio_processo env1
+    where env1.jn_envio_xmlid =  $P{idEnvioXml}) as qtd_total,
+(select count(*) from jn_envio_processo env1
+where env1.jn_envio_xmlid = $P{idEnvioXml} 
+and env1.fl_enviado = 1) as qtd_enviados,
+(select count(*) from jn_envio_processo env1
+where env1.jn_envio_xmlid = $P{idEnvioXml} 
+and env1.fl_enviado = 0) as qtd_nao_enviados
+from dual]]>
+	</queryString>
+	<field name="QTD_TOTAL" class="java.math.BigDecimal"/>
+	<field name="QTD_ENVIADOS" class="java.math.BigDecimal"/>
+	<field name="QTD_NAO_ENVIADOS" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="210" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<image>
+				<reportElement x="10" y="2" width="300" height="80" uuid="3f51be86-8dc4-4aba-8d4f-571a941d5de6"/>
+				<imageExpression><![CDATA["RelEnvio/Logo-TREDF.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="14" y="100" width="226" height="20" uuid="3a336e7a-726f-40c9-a15e-b436e516f48c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Total de processos computados]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="245" y="100" width="60" height="20" uuid="19d8efbd-2f71-4c29-83d1-871189055631"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{QTD_TOTAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="14" y="121" width="226" height="20" uuid="0a3aeb59-a601-4e0e-bcb3-73f155927a72"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Total de processos enviados]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="245" y="121" width="60" height="20" uuid="4881a2dd-987f-49c1-9237-c48704e81ed8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{QTD_ENVIADOS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="14" y="141" width="226" height="20" uuid="08491be2-6c8a-44ca-9833-275a6f083754"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Total de processos não enviados]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="245" y="141" width="60" height="20" uuid="c114c0a2-b5ee-49f4-bedc-8cc9dd4e070b"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{QTD_NAO_ENVIADOS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="310" y="10" width="380" height="52" uuid="5e50f747-9eae-4637-8584-063317cd655b"/>
+				<textElement textAlignment="Center">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Relatório dos processos enviados ao CNJ]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="138" splitType="Stretch">
+			<subreport>
+				<reportElement positionType="Float" x="5" y="10" width="792" height="50" uuid="46adba99-81f2-4f64-8db6-8e4c200dd98c"/>
+				<subreportParameter name="idEnvioXml">
+					<subreportParameterExpression><![CDATA[$P{idEnvioXml}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["RelEnvio/Inner_ProcessosEnviados.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="74" width="792" height="50" uuid="f40f5ed9-cfca-42a9-9e53-62dc94a31dd4"/>
+				<subreportParameter name="idEnvioXml">
+					<subreportParameterExpression><![CDATA[$P{idEnvioXml}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["RelEnvio/Inner_ProcessosNaoEnviados.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="50">
+			<textField>
+				<reportElement x="722" y="10" width="70" height="30" uuid="2441eb39-01f3-4e89-8203-41e70367fa2c"/>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

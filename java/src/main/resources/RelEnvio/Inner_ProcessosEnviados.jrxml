@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Inner_ProcessosEnviados" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="e9121696-6871-4dfe-8094-25464bd553af">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="203"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="788"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="JUSNUM"/>
+	<style name="Linha">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[($V{REPORT_COUNT} % 2) == 0]]></conditionExpression>
+			<style backcolor="#B9DFFA"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="idEnvioXml" class="java.lang.Long"/>
+	<queryString language="SQL">
+		<![CDATA[select envio.id, 
+    envio.dt_comando,
+    envio.fl_enviado,
+    case when envio.dt_envio is null then '-'
+        else to_char(envio.dt_envio, 'DD/MM/YYYY') end as dt_envio,
+    proc.numero,
+    case when proc.fl_enviado > 0 then 'Sim'
+    else 'Não' end as processo_enviado,
+    proc.info_envio,
+    proc.dado_envio,
+    case when proc.fl_parse_ok > 0 then 'Sim' 
+    else 'Não' end as documento_formatado,
+    case when proc.DT_PROC_ENVIO is null then '-'
+       else to_char(proc.DT_PROC_ENVIO, 'DD/MM/YYYY HH24:MI') 
+       end as dt_proc_envio
+from jn_envio_xml envio
+inner join jn_envio_processo proc on proc.jn_envio_xmlid = envio.id
+where envio.id = $P{idEnvioXml} 
+and proc.FL_ENVIADO = 1
+order by proc.fl_enviado, proc.numero]]>
+	</queryString>
+	<field name="DT_PROC_ENVIO" class="java.lang.String"/>
+	<field name="DOCUMENTO_FORMATADO" class="java.lang.String"/>
+	<field name="INFO_ENVIO" class="java.lang.String"/>
+	<field name="PROCESSO_ENVIADO" class="java.lang.String"/>
+	<field name="NUMERO" class="java.lang.String"/>
+	<field name="DT_ENVIO" class="java.lang.String"/>
+	<field name="DT_COMANDO" class="java.sql.Date"/>
+	<field name="FL_ENVIADO" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="46" splitType="Stretch">
+			<staticText>
+				<reportElement x="136" y="10" width="530" height="30" uuid="af26fc5f-8505-413e-83bf-41a81526dfdd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20"/>
+				</textElement>
+				<text><![CDATA[Processos enviados para o CNJ]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="16" width="80" height="14" uuid="92e05b8a-ad6a-4bee-9046-26e86b4b0e23"/>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[Processo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="124" y="2" width="80" height="28" uuid="9ad42f8c-1491-4b2d-bdcb-a6cb1af1ba83"/>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[Data do comando de envio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="16" width="90" height="14" uuid="67e8d35d-6d21-47b7-929e-c0b1616b408b"/>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[Processo enviado]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="31" width="800" height="1" uuid="f818d3ac-9d4d-4ab6-b54d-91a67ede7c4d"/>
+			</line>
+			<staticText>
+				<reportElement x="425" y="4" width="90" height="26" uuid="357416ce-193b-49c3-a466-270c67010b3a"/>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[Documento bem formatado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="222" y="3" width="80" height="28" uuid="cabd200c-05f8-467b-8616-e9c74683b0d8"/>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[Data de envio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="522" y="16" width="80" height="14" uuid="5bc4ab46-bdf4-46c8-8398-b4e7a2b7beca"/>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[Info retorno CNJ]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="42" splitType="Stretch">
+			<frame>
+				<reportElement style="Linha" mode="Opaque" x="0" y="0" width="802" height="42" uuid="572d021c-504d-4b8e-9033-ddf01a762826"/>
+				<textField>
+					<reportElement x="0" y="6" width="120" height="30" uuid="f3ccf325-287e-4557-8970-8973389c837b"/>
+					<textFieldExpression><![CDATA[$F{NUMERO}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="124" y="6" width="88" height="30" uuid="3c77be27-bf8a-4f9d-8529-b67efc09ada0"/>
+					<textFieldExpression><![CDATA[$F{DT_COMANDO}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="222" y="5" width="88" height="30" uuid="a90e9a61-a17c-4dff-938f-4852b0d42a09"/>
+					<textFieldExpression><![CDATA[$F{DT_PROC_ENVIO}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="324" y="5" width="100" height="30" uuid="5aaa17c8-f849-48ed-9882-da684bf9d127"/>
+					<textFieldExpression><![CDATA[$F{PROCESSO_ENVIADO}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="425" y="5" width="100" height="30" uuid="ce6bb5a1-0b72-4020-88bd-795edeb345bd"/>
+					<textFieldExpression><![CDATA[$F{DOCUMENTO_FORMATADO}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="525" y="5" width="277" height="30" uuid="ccfa146e-e03f-4343-8086-9d38166f6545"/>
+					<textFieldExpression><![CDATA[$F{INFO_ENVIO}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="11" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="2" width="800" height="1" uuid="ecbb23b1-e5c4-4477-b04d-6dfe28af1dc5"/>
+			</line>
+		</band>
+	</pageFooter>
+</jasperReport>

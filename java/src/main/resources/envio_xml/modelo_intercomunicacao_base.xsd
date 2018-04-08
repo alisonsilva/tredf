@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+               xmlns:cnj="http://www.cnj.jus.br/intercomunicacao-2.2.2"
+               xmlns:xmime="http://www.w3.org/2005/05/xmlmime" 
+              xmlns:ns1="http://www.cnj.jus.br/replicacao-nacional" 
+              targetNamespace="http://www.cnj.jus.br/replicacao-nacional" 
+              elementFormDefault="qualified">
+	<import namespace="http://www.cnj.jus.br/intercomunicacao-2.2.2" schemaLocation="http://www.cnj.jus.br/images/dti/Comite_Gestao_TIC/Modelo_Nacional_Interoperabilidade/versao_07_07_2014/intercomunicacao-2.2.2.xsd"/>
+	<element name="processos">
+		<complexType>
+			<sequence>
+				<element name="processo" type="cnj:tipoProcessoJudicial" minOccurs="1" maxOccurs="unbounded"/>
+			</sequence>
+		</complexType>
+	</element>
+</schema>

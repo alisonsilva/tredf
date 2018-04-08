@@ -1,0 +1,103 @@
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building FormulariosTREDF 0.0.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.1:tree (default-cli) @ FormulariosTREDF ---
+[INFO] br.jus.tredf.formularios:FormulariosTREDF:war:0.0.1-SNAPSHOT
+[INFO] +- org.springframework:spring-webmvc:jar:4.3.1.RELEASE:compile
+[INFO] |  +- org.springframework:spring-aop:jar:4.3.1.RELEASE:compile
+[INFO] |  +- org.springframework:spring-beans:jar:4.3.1.RELEASE:compile
+[INFO] |  +- org.springframework:spring-context:jar:4.3.1.RELEASE:compile
+[INFO] |  +- org.springframework:spring-core:jar:4.3.1.RELEASE:compile
+[INFO] |  |  \- commons-logging:commons-logging:jar:1.2:compile
+[INFO] |  +- org.springframework:spring-expression:jar:4.3.1.RELEASE:compile
+[INFO] |  \- org.springframework:spring-web:jar:4.3.1.RELEASE:compile
+[INFO] +- org.springframework:spring-tx:jar:4.3.1.RELEASE:compile
+[INFO] +- com.fasterxml.jackson.core:jackson-databind:jar:2.5.3:compile
+[INFO] |  +- com.fasterxml.jackson.core:jackson-annotations:jar:2.5.0:compile
+[INFO] |  \- com.fasterxml.jackson.core:jackson-core:jar:2.5.3:compile
+[INFO] +- javax.servlet:javax.servlet-api:jar:3.1.0:compile
+[INFO] +- org.apache.commons:commons-lang3:jar:3.5:compile
+[INFO] +- org.springframework.data:spring-data-mongodb:jar:1.9.2.RELEASE:compile
+[INFO] |  +- org.springframework.data:spring-data-commons:jar:1.12.2.RELEASE:compile
+[INFO] |  \- org.mongodb:mongo-java-driver:jar:2.14.0:compile
+[INFO] +- com.google.code.gson:gson:jar:1.7.1:compile
+[INFO] +- org.slf4j:slf4j-api:jar:1.7.15:compile
+[INFO] +- ch.qos.logback:logback-classic:jar:1.1.4:runtime (scope not updated to compile)
+[INFO] |  \- ch.qos.logback:logback-core:jar:1.1.4:runtime
+[INFO] +- org.springframework.boot:spring-boot-starter-web:jar:1.3.6.RELEASE:compile
+[INFO] |  +- org.springframework.boot:spring-boot-starter:jar:1.3.6.RELEASE:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot:jar:1.3.6.RELEASE:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-autoconfigure:jar:1.3.6.RELEASE:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-starter-logging:jar:1.3.6.RELEASE:compile
+[INFO] |  |  |  +- org.slf4j:jcl-over-slf4j:jar:1.7.21:compile
+[INFO] |  |  |  +- org.slf4j:jul-to-slf4j:jar:1.7.21:compile
+[INFO] |  |  |  \- org.slf4j:log4j-over-slf4j:jar:1.7.21:compile
+[INFO] |  |  \- org.yaml:snakeyaml:jar:1.16:runtime
+[INFO] |  +- org.springframework.boot:spring-boot-starter-tomcat:jar:1.3.6.RELEASE:compile
+[INFO] |  |  +- org.apache.tomcat.embed:tomcat-embed-core:jar:8.0.36:compile
+[INFO] |  |  +- org.apache.tomcat.embed:tomcat-embed-el:jar:8.0.36:compile
+[INFO] |  |  +- org.apache.tomcat.embed:tomcat-embed-logging-juli:jar:8.0.36:compile
+[INFO] |  |  \- org.apache.tomcat.embed:tomcat-embed-websocket:jar:8.0.36:compile
+[INFO] |  \- org.springframework.boot:spring-boot-starter-validation:jar:1.3.6.RELEASE:compile
+[INFO] |     \- org.hibernate:hibernate-validator:jar:5.2.4.Final:compile
+[INFO] |        +- javax.validation:validation-api:jar:1.1.0.Final:compile
+[INFO] |        +- org.jboss.logging:jboss-logging:jar:3.2.1.Final:compile
+[INFO] |        \- com.fasterxml:classmate:jar:1.1.0:compile
+[INFO] +- org.springframework.boot:spring-boot-starter-test:jar:1.3.6.RELEASE:compile
+[INFO] |  +- junit:junit:jar:4.12:compile
+[INFO] |  +- org.hamcrest:hamcrest-core:jar:1.3:compile
+[INFO] |  +- org.hamcrest:hamcrest-library:jar:1.3:compile
+[INFO] |  \- org.springframework:spring-test:jar:4.2.7.RELEASE:compile
+[INFO] +- com.jayway.jsonpath:json-path:jar:2.0.0:compile
+[INFO] |  \- net.minidev:json-smart:jar:2.1.1:compile
+[INFO] |     \- net.minidev:asm:jar:1.0.2:compile
+[INFO] |        \- asm:asm:jar:3.3.1:compile
+[INFO] +- com.jayway.restassured:rest-assured:jar:2.8.0:compile
+[INFO] |  +- org.codehaus.groovy:groovy:jar:2.4.4:compile
+[INFO] |  +- org.codehaus.groovy:groovy-xml:jar:2.4.4:compile
+[INFO] |  +- org.apache.httpcomponents:httpclient:jar:4.5.1:compile
+[INFO] |  |  \- org.apache.httpcomponents:httpcore:jar:4.4.3:compile
+[INFO] |  +- org.apache.httpcomponents:httpmime:jar:4.5.1:compile
+[INFO] |  +- org.ccil.cowan.tagsoup:tagsoup:jar:1.2.1:compile
+[INFO] |  +- com.jayway.restassured:json-path:jar:2.8.0:compile
+[INFO] |  |  +- org.codehaus.groovy:groovy-json:jar:2.4.4:compile
+[INFO] |  |  \- com.jayway.restassured:rest-assured-common:jar:2.8.0:compile
+[INFO] |  \- com.jayway.restassured:xml-path:jar:2.8.0:compile
+[INFO] +- c3p0:c3p0:jar:0.9.1.2:compile
+[INFO] +- org.bouncycastle:bcprov-jdk16:jar:1.46:provided
+[INFO] +- org.apache.vysper:vysper-core:jar:0.7:compile
+[INFO] |  +- org.apache.vysper:nbxml:jar:0.7:compile
+[INFO] |  +- org.apache.mina:mina-core:jar:2.0.2:compile
+[INFO] |  +- commons-codec:commons-codec:jar:1.4:compile
+[INFO] |  +- commons-io:commons-io:jar:1.4:compile
+[INFO] |  +- commons-lang:commons-lang:jar:2.5:compile
+[INFO] |  \- dnsjava:dnsjava:jar:2.0.8:compile
+[INFO] +- org.mockito:mockito-core:jar:2.3.7:test (scope not updated to compile)
+[INFO] |  +- net.bytebuddy:byte-buddy:jar:1.5.5:test
+[INFO] |  +- net.bytebuddy:byte-buddy-agent:jar:1.5.5:test
+[INFO] |  \- org.objenesis:objenesis:jar:2.4:test
+[INFO] +- org.mockito:mockito-all:jar:2.0.2-beta:test
+[INFO] +- com.unboundid:unboundid-ldapsdk:jar:2.3.3:compile
+[INFO] +- com.sun.jersey:jersey-bundle:jar:1.17:compile
+[INFO] |  \- javax.ws.rs:jsr311-api:jar:1.1.1:compile
+[INFO] \- com.sun.jersey:jersey-json:jar:1.17.1:compile
+[INFO]    +- org.codehaus.jettison:jettison:jar:1.1:compile
+[INFO]    +- com.sun.xml.bind:jaxb-impl:jar:2.2.3-1:compile
+[INFO]    |  \- javax.xml.bind:jaxb-api:jar:2.2.2:compile
+[INFO]    |     +- javax.xml.stream:stax-api:jar:1.0-2:compile
+[INFO]    |     \- javax.activation:activation:jar:1.1:compile
+[INFO]    +- org.codehaus.jackson:jackson-core-asl:jar:1.9.2:compile
+[INFO]    +- org.codehaus.jackson:jackson-mapper-asl:jar:1.9.2:compile
+[INFO]    +- org.codehaus.jackson:jackson-jaxrs:jar:1.9.2:compile
+[INFO]    +- org.codehaus.jackson:jackson-xc:jar:1.9.2:compile
+[INFO]    \- com.sun.jersey:jersey-core:jar:1.17.1:compile
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 5.399s
+[INFO] Finished at: Fri Mar 03 15:40:29 BRT 2017
+[INFO] Final Memory: 14M/224M
+[INFO] ------------------------------------------------------------------------
