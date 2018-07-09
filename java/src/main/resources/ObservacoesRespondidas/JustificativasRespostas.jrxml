@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="JustificativasRespostas" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="609ce4b2-4484-46a8-a70a-7e64b2ac7a6c">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="JUSNUM"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<style name="Linha">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[($V{REPORT_COUNT} % 2) == 0]]></conditionExpression>
+			<style backcolor="#B9DFFA"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="competencia" class="java.lang.String"/>
+	<parameter name="sg_secao" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT 
+    to_char(t.dt_referencia, 'mm/yyyy') "Mês Referência",
+    (SELECT c.sigla FROM   jusnum.jn_cartorio c
+     WHERE  c.id = t.jn_cartorioid) "Cartório",
+    (SELECT g.des_grupo FROM   dw_cnj.cnj_indicadores i,
+         dw_cnj.cnj_categorias  c,
+         dw_cnj.cnj_grupo       g
+         WHERE  t.cod_indicador = i.cod_indicador
+         AND    i.cod_categoria = c.cod_categoria
+         and    c.cod_grupo = g.cod_grupo ) "Grupo",
+    (SELECT i.sgl_indicador FROM   dw_cnj.cnj_indicadores i
+      WHERE  t.cod_indicador = i.cod_indicador) "Sigla",
+     t.cod_indicador "Cód.",  
+     (SELECT i.des_indicador FROM   dw_cnj.cnj_indicadores i
+      WHERE  t.cod_indicador = i.cod_indicador) "Indicador",
+      t.protocolo "Protocolo",  t.justificativa "Justificativa Cartório",
+     decode(t.fl_reg_novo, 1, 'Sim', 'Não') "Adicionado?",
+     t.comentario_sabad "Comentários TI"
+     FROM   jusnum.jn_prodserv_obs t
+     WHERE  to_char(t.dt_referencia, 'YYYYMM') =  $P{competencia} 
+     and T.JN_CARTORIOID = (select distinct Tt.JN_CARTORIOID from jusnum.jn_cartorio car
+            inner join jusnum.jn_prodserv_obs tt on Tt.JN_CARTORIOID = Car.ID
+            where Car.SIGLA =  $P{sg_secao} )
+     ORDER  BY 1, 2, 3]]>
+	</queryString>
+	<field name="Mês Referência" class="java.lang.String"/>
+	<field name="Cartório" class="java.lang.String"/>
+	<field name="Grupo" class="java.lang.String"/>
+	<field name="Sigla" class="java.lang.String"/>
+	<field name="Cód." class="java.lang.String"/>
+	<field name="Indicador" class="java.lang.String"/>
+	<field name="Protocolo" class="java.lang.String"/>
+	<field name="Justificativa Cartório" class="java.lang.String"/>
+	<field name="Adicionado?" class="java.lang.String"/>
+	<field name="Comentários TI" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement x="0" y="10" width="332" height="30" uuid="8c48cb5c-78dc-4092-9991-71480d73e036"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="20"/>
+				</textElement>
+				<text><![CDATA[Comentários]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="45" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<line>
+				<reportElement x="0" y="40" width="810" height="1" uuid="6ed868d2-4447-427d-a4ca-139a3eb6e9cb"/>
+			</line>
+			<staticText>
+				<reportElement x="4" y="25" width="46" height="14" uuid="93dc104c-3945-41bb-9ba1-977df285dd17"/>
+				<text><![CDATA[Mês]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="53" y="25" width="46" height="14" uuid="0f9bf02d-f8a3-4e09-b6db-bf3b56735de4"/>
+				<text><![CDATA[Cartório]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="101" y="25" width="90" height="14" uuid="b379a344-4421-4095-8ee9-c78225163936"/>
+				<text><![CDATA[Grupo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="192" y="25" width="50" height="14" uuid="4da7c38b-b22f-4145-8818-c94697f6f84d"/>
+				<text><![CDATA[Sigla]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="244" y="25" width="22" height="14" uuid="d6500153-2bee-4659-92b1-d0ca5954ec22"/>
+				<text><![CDATA[Cód.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="269" y="25" width="50" height="14" uuid="b493cea3-2eab-40c6-969e-a9a1b243f082"/>
+				<text><![CDATA[Indicador]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="25" width="50" height="14" uuid="e9a83079-2456-4277-9101-41f72f080db3"/>
+				<text><![CDATA[Protocolo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="480" y="25" width="142" height="14" uuid="d4f0c13b-5850-40b3-b06c-67ee304ef739"/>
+				<text><![CDATA[Justif. Cartório]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="632" y="25" width="142" height="14" uuid="17a7bebc-b2c0-4921-b0f8-771b4fb8652f"/>
+				<text><![CDATA[Comentários TI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="783" y="25" width="22" height="14" uuid="2b8e30fb-ece8-45a2-9214-8c797842765b"/>
+				<text><![CDATA[Ad.]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="60" splitType="Stretch">
+			<frame>
+				<reportElement style="Linha" mode="Opaque" x="0" y="0" width="810" height="58" uuid="5fa1bba6-1f2c-45ed-8499-0df64f3d6847">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textField>
+					<reportElement x="5" y="-1" width="45" height="21" uuid="5b287832-fb36-4ee3-9662-49d7bc2a36ae"/>
+					<textFieldExpression><![CDATA[$F{Mês Referência}]]></textFieldExpression>
+				</textField>
+				<textField pattern="MM/yyyy">
+					<reportElement x="53" y="-1" width="46" height="21" uuid="bf469f5b-1441-4e01-970d-87d0b5d1682a"/>
+					<textFieldExpression><![CDATA[$F{Cartório}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="101" y="-1" width="90" height="40" uuid="fc0c1f19-f689-444a-a870-be86fbc67673"/>
+					<textFieldExpression><![CDATA[$F{Grupo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="192" y="-1" width="50" height="29" uuid="db13037d-79c2-4340-a05b-c46bd930f7de"/>
+					<textFieldExpression><![CDATA[$F{Sigla}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="245" y="-1" width="21" height="29" uuid="1747cb68-7a0e-49ab-9b67-6d2a2d758575"/>
+					<textFieldExpression><![CDATA[$F{Cód.}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="269" y="-1" width="150" height="50" uuid="741aee06-48d9-4561-8b99-3d4eddf75ae1"/>
+					<textFieldExpression><![CDATA[$F{Indicador}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="421" y="-1" width="56" height="29" uuid="5f8529e6-bd1b-4f8c-8bcf-b5ec9167b109"/>
+					<textFieldExpression><![CDATA[$F{Protocolo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="480" y="-1" width="150" height="50" uuid="9c7b5f01-e491-4b91-bd7c-7c96e7e8307c"/>
+					<textFieldExpression><![CDATA[$F{Justificativa Cartório}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="633" y="-1" width="150" height="50" uuid="2792f476-1a6d-401f-a50e-2697d4668dfa"/>
+					<textFieldExpression><![CDATA[$F{Justificativa Cartório}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="784" y="-1" width="21" height="29" uuid="0f2fcba9-c7b2-47e1-a9ea-877cc48f0b78"/>
+					<textFieldExpression><![CDATA[$F{Adicionado?}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="810" height="1" uuid="04637624-a84d-48be-98ec-f151360776b6"/>
+			</line>
+		</band>
+	</pageFooter>
+</jasperReport>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="IndicadoresEObservacoes" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="fa33183a-944d-46c1-93d4-f4ab6c6e7d06">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="JUSNUM"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="competencia" class="java.lang.String"/>
+	<parameter name="sg_secao" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT (SELECT COUNT(*)
+              FROM DW_CNJ.CNJ_DADOS DADOS 
+              INNER JOIN DW_CNJ.CNJ_INDICADORES INDIC ON INDIC.COD_INDICADOR = DADOS.COD_INDICADOR 
+              INNER JOIN JN_CARTORIO CARTORIO ON CARTORIO.SIGLA = DADOS.SG_SECAO 
+WHERE TO_CHAR(DADOS.DAT_REFERENCIA, 'YYYYMM') =   $P{competencia} 
+AND DADOS.SG_SECAO =  $P{sg_secao} 
+AND INDIC.COD_INDICADOR IN (20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 
+33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44)) AS QTD_GERADOS,
+(SELECT COUNT(*)
+              FROM DW_CNJ.CNJ_DADOS DADOS 
+              INNER JOIN DW_CNJ.CNJ_INDICADORES INDIC ON INDIC.COD_INDICADOR = DADOS.COD_INDICADOR 
+              INNER JOIN JN_CARTORIO CARTORIO ON CARTORIO.SIGLA = DADOS.SG_SECAO 
+              INNER JOIN JN_PRODSERV_OBS OBSERV ON (OBSERV.COD_INDICADOR = DADOS.COD_INDICADOR 
+                                                   AND TO_CHAR(OBSERV.DT_REFERENCIA, 'YYYYMM') = TO_CHAR(DADOS.DAT_REFERENCIA, 'YYYYMM') 
+                                                   AND OBSERV.PROTOCOLO = DADOS.NR_PROT) 
+WHERE TO_CHAR(DADOS.DAT_REFERENCIA, 'YYYYMM') =   $P{competencia} 
+AND DADOS.SG_SECAO =  $P{sg_secao} 
+AND INDIC.COD_INDICADOR IN (20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 
+33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44) 
+AND (OBSERV.FL_REG_NOVO = 0 OR OBSERV.FL_REG_NOVO IS NULL) ) AS QTD_JUSTIF_EXIST,
+(
+	SELECT COUNT(*) 
+              FROM JN_PRODSERV_OBS OBSERV 
+              INNER JOIN DW_CNJ.CNJ_INDICADORES INDIC ON INDIC.COD_INDICADOR = OBSERV.COD_INDICADOR
+              INNER JOIN JN_CARTORIO CARTORIO ON CARTORIO.ID = OBSERV.JN_CARTORIOID
+WHERE TO_CHAR(OBSERV.DT_REFERENCIA, 'YYYYMM') =  $P{competencia} 
+AND CARTORIO.SIGLA =  $P{sg_secao} 
+AND INDIC.COD_INDICADOR IN (20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 
+33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44) 
+AND (OBSERV.FL_REG_NOVO = 1)
+) as 	QTD_JUSTIF_N_EXIST
+FROM DUAL]]>
+	</queryString>
+	<field name="QTD_GERADOS" class="java.math.BigDecimal"/>
+	<field name="QTD_JUSTIF_EXIST" class="java.math.BigDecimal"/>
+	<field name="QTD_JUSTIF_N_EXIST" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="170" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<image>
+				<reportElement x="10" y="2" width="300" height="80" uuid="3f51be86-8dc4-4aba-8d4f-571a941d5de6"/>
+				<imageExpression><![CDATA["RelObservacoesGerados/Logo-TREDF.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="310" y="10" width="380" height="52" uuid="5e50f747-9eae-4637-8584-063317cd655b"/>
+				<textElement textAlignment="Left">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Justificativas e Respostas por Competência e Cartório]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="96" width="224" height="20" uuid="349591f2-4714-4f9d-bceb-72879f0abbd6"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Competência:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="245" y="96" width="60" height="20" uuid="f2a5d827-c34d-4792-a0bc-ead6ea0291d2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[java.lang.String.valueOf($P{competencia}).substring(4) + "/" +
+java.lang.String.valueOf($P{competencia}).substring(0,4)]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="16" y="116" width="224" height="20" uuid="7bfdcbd5-c22b-424c-82c3-fd5c69ccb484"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Cartório:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="245" y="116" width="60" height="20" uuid="b7dbd9f9-a163-42d9-91c0-88203fae5181"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{sg_secao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="288" splitType="Stretch">
+			<subreport>
+				<reportElement x="-14" y="10" width="833" height="250" uuid="3bf01f58-2fb1-4fa2-9ce9-939acb593479"/>
+				<subreportParameter name="sg_secao">
+					<subreportParameterExpression><![CDATA[$P{sg_secao}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="competencia">
+					<subreportParameterExpression><![CDATA[$P{competencia}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["ObservacoesRespondidas/JustificativasRespostas.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="50">
+			<textField>
+				<reportElement x="722" y="10" width="70" height="30" uuid="2441eb39-01f3-4e89-8203-41e70367fa2c"/>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
