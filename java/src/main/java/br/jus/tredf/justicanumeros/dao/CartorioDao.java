@@ -29,8 +29,8 @@ public class CartorioDao implements Serializable {
 
 
   /**
-   * Recupera a listagem com todos os cartórios cadastrados
-   * @return Listagem com os cartórios cadastrados
+   * Recupera a listagem com todos os cartï¿½rios cadastrados
+   * @return Listagem com os cartï¿½rios cadastrados
    */
   public List<Cartorio> getCartorios() {
     List<Cartorio> cartorios = new ArrayList<Cartorio>();
@@ -44,6 +44,7 @@ public class CartorioDao implements Serializable {
         cartorio.setId(rs.getLong("ID"));
         cartorio.setNome(rs.getString("NOME"));
         cartorio.setSigla(rs.getString("SIGLA"));
+        cartorio.setGrauIndicador(rs.getInt("GRAU_INDICADOR"));
         cartorios.add(cartorio);
       }
       rs.close();
@@ -60,20 +61,21 @@ public class CartorioDao implements Serializable {
     return cartorios;
   }
   
-  public Cartorio getCartorioPorId(Integer id) {
+  public Cartorio getCartorioPorId(Long id) {
     Cartorio cartorio = null;
     Connection con = null;
     
     try {
       con = dataSource.getConnection();
       PreparedStatement pstmtQ = con.prepareStatement("SELECT * FROM JN_CARTORIO WHERE ID = ?");
-      pstmtQ.setInt(1, id);
+      pstmtQ.setLong(1, id);
       ResultSet rs = pstmtQ.executeQuery();
       if(rs.next()) {
         cartorio = new Cartorio();
         cartorio.setId(new Long(id));
         cartorio.setNome(rs.getString("NOME"));
-        cartorio.setSigla(rs.getString("SIGLA"));        
+        cartorio.setSigla(rs.getString("SIGLA"));       
+        cartorio.setGrauIndicador(rs.getInt("GRAU_INDICADOR"));
       }
     } catch (SQLException e) {
     } finally {

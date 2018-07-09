@@ -17,12 +17,20 @@ public class Observacao implements Serializable {
 
   private Long id;
   private int codIndicador;
+  private int grupoObservacao;
   private String nomeIndicador;
+  private String processo;
+  private String classe;
+  private String dsClasse;
+  private String sgClasse;
+  private String assunto;
   private Date dtReferencia;
   private String dtReferenciaStr;
   private String protocolo;
   private String justificativa;
   private String resposta;
+  private String categoria;
+  private String siglaIndicador;
   private boolean flRegNovo;
   private Cartorio cartorio;
   public Long getId() {
@@ -71,14 +79,50 @@ public class Observacao implements Serializable {
   public void setFlRegNovo(boolean flRegNovo) {
     this.flRegNovo = flRegNovo;
   }
-  public Cartorio getCartorio() {
+  public String getSiglaIndicador() {
+		return siglaIndicador;
+	}
+	public void setSiglaIndicador(String siglaIndicador) {
+		this.siglaIndicador = siglaIndicador;
+	}
+	public Cartorio getCartorio() {
     return cartorio;
   }
   public void setCartorio(Cartorio cartorio) {
     this.cartorio = cartorio;
   }  
   
-  public String getResposta() {
+  public String getProcesso() {
+		return processo;
+	}
+	public void setProcesso(String processo) {
+		this.processo = processo;
+	}
+	public String getClasse() {
+		return classe;
+	}
+	public void setClasse(String classe) {
+		this.classe = classe;
+	}
+	public String getDsClasse() {
+		return dsClasse;
+	}
+	public void setDsClasse(String dsClasse) {
+		this.dsClasse = dsClasse;
+	}
+	public String getSgClasse() {
+		return sgClasse;
+	}
+	public void setSgClasse(String sgClasse) {
+		this.sgClasse = sgClasse;
+	}
+	public String getAssunto() {
+		return assunto;
+	}
+	public void setAssunto(String assunto) {
+		this.assunto = assunto;
+	}
+	public String getResposta() {
 		return resposta;
 	}
 	public void setResposta(String resposta) {
@@ -89,8 +133,20 @@ public class Observacao implements Serializable {
   }
   public void setDtReferenciaStr(String dtReferenciaStr) {
     this.dtReferenciaStr = dtReferenciaStr;
-  }
-  public void setFlRegNovo(int fl) {
+  }  
+  public String getCategoria() {
+		return categoria;
+	}
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
+	}	
+	public int getGrupoObservacao() {
+		return grupoObservacao;
+	}
+	public void setGrupoObservacao(int grupoObservacao) {
+		this.grupoObservacao = grupoObservacao;
+	}
+	public void setFlRegNovo(int fl) {
     if(fl == 1) {
       this.flRegNovo = true;
     } else {

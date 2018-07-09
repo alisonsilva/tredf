@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
@@ -29,10 +30,13 @@ import br.jus.tredf.justicanumeros.util.PropertiesServiceController;
 @EnableJms
 @EnableScheduling
 @ComponentScan(basePackages="br.jus.tredf.justicanumeros")
+@PropertySource("classpath:formstredf.properties")
 public class FormulariosTREDFConfiguration extends WebMvcConfigurerAdapter {
-	private static final String DEFAULT_BROKER_URL = "tcp://srv-bi.tre-df.gov.br:61616";
-	private static final String DEFAULT_SAO_ARQUIVO_EXECUCAO_QUEUE = "qSaoArquivoExecucao";
-	private static final String DEFAULT_EMAIL = "qEmail";
+	public static final String DEFAULT_SAO_ARQUIVO_EXECUCAO_QUEUE = "qSaoArquivoExecucao";
+	public static final String DEFAULT_SAO_ARQUIVO_DOTACAO_QUEUE = "qSaoArquivoDotacao";
+	public static final String DEFAULT_SAO_ARQUIVO_PROP_ORCAMENTARIA = "qPropOrcamentaria";
+	public static final String DEFAULT_EMAIL = "qEmail";
+	private static final String DEFAULT_BROKER_URL = "tcp://10.20.1.23:61616"; //srv-bi.tre-df.gov.br
 	
   @Autowired
   ConnectionFactory connectionFactory;
@@ -50,10 +54,28 @@ public class FormulariosTREDFConfiguration extends WebMvcConfigurerAdapter {
     return bundle;
   }
   
+  public @Bean ResourceBundle bundleExecucao() {
+    Locale locale = new Locale("pt", "BR");
+    ResourceBundle bundle = ResourceBundle.getBundle("execucao/info_execucao", locale);
+    return bundle;
+  }  
+  
+  public @Bean ResourceBundle bundlePropOrcamentaria() {
+    Locale locale = new Locale("pt", "BR");
+    ResourceBundle bundle = ResourceBundle.getBundle("execucao/info_proporcamentaria", locale);
+    return bundle;
+  }  
+  
+  public @Bean ResourceBundle bundleDotacao() {
+    Locale locale = new Locale("pt", "BR");
+    ResourceBundle bundle = ResourceBundle.getBundle("execucao/info_dotacao", locale);
+    return bundle;
+  }   
+  
   @Bean(name = "multipartResolver")
   public CommonsMultipartResolver multipartResolver() {
       CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-      multipartResolver.setMaxUploadSize(10000000);
+      multipartResolver.setMaxUploadSize(-1);// no limits (in bytes)
       return multipartResolver;
   }  
   
@@ -89,6 +111,22 @@ public class FormulariosTREDFConfiguration extends WebMvcConfigurerAdapter {
       template.setDefaultDestinationName(DEFAULT_SAO_ARQUIVO_EXECUCAO_QUEUE);
       return template;
   }
+
+  @Bean
+  public JmsTemplate jmsSaoArquivoDotacaoTemplate(){
+      JmsTemplate template = new JmsTemplate();
+      template.setConnectionFactory(connectionFactory());
+      template.setDefaultDestinationName(DEFAULT_SAO_ARQUIVO_DOTACAO_QUEUE);
+      return template;
+  }
+  
+  @Bean
+  public JmsTemplate jmsSaoArquivoPropOrcamentaria(){
+      JmsTemplate template = new JmsTemplate();
+      template.setConnectionFactory(connectionFactory());
+      template.setDefaultDestinationName(DEFAULT_SAO_ARQUIVO_PROP_ORCAMENTARIA);
+      return template;
+  }  
   
   @Bean
   public JmsTemplate jmsEmailTemplate(){

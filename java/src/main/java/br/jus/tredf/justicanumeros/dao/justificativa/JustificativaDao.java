@@ -28,6 +28,7 @@ import br.jus.tredf.justicanumeros.model.Cartorio;
 import br.jus.tredf.justicanumeros.model.Indicador;
 import br.jus.tredf.justicanumeros.model.exception.ICodigosErros;
 import br.jus.tredf.justicanumeros.model.exception.ParametroException;
+import br.jus.tredf.justicanumeros.model.justificativa.GrupoIndicador;
 import br.jus.tredf.justicanumeros.model.justificativa.Observacao;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -126,7 +127,8 @@ public class JustificativaDao {
     return indicadores;    
   }
   
-  public List<Observacao> getRegistrosProdutividadeComObservacoes(Date dataReferencia, String secao) {
+  public List<Observacao> getRegistrosProdutividadeComObservacoes(Date dataReferencia, 
+  		String secao, int grauIndicador, int idGrupoObservacao) {
     if(dataReferencia == null || 
         StringUtils.isEmpty(secao)) {
       throw new ParametroException(bundle.getString("JustificativaDao.erro.parametrosinvalidos"), 
@@ -137,37 +139,50 @@ public class JustificativaDao {
     try {
       SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
       conn = dataSource.getConnection();
-      PreparedStatement pstmtQ2 = conn.prepareStatement("SELECT OBSERV.*, CARTORIO.SIGLA AS SIGLA_CARTORIO, INDIC.DES_INDICADOR AS INDICADOR "
+      PreparedStatement pstmtQ2 = conn.prepareStatement("SELECT OBSERV.*, CARTORIO.SIGLA AS SIGLA_CARTORIO, INDIC.DES_INDICADOR AS INDICADOR, '' as CATEGORIA "
               +"FROM JN_PRODSERV_OBS OBSERV "
               +"INNER JOIN JN_CARTORIO CARTORIO ON CARTORIO.ID = OBSERV.JN_CARTORIOID "
               +"INNER JOIN DW_CNJ.CNJ_INDICADORES INDIC ON INDIC.COD_INDICADOR = OBSERV.COD_INDICADOR "
               +"WHERE CARTORIO.SIGLA = ? "
               +"AND FL_REG_NOVO = 1 "
               +"AND TO_CHAR(DT_REFERENCIA, 'YYYYMM') = ?");
-      PreparedStatement pstmtQ1 = conn.prepareStatement("SELECT DADOS.COD_INDICADOR, "
-              +"DADOS.DAT_REFERENCIA AS DT_REFERENCIA, " 
-              +"INDIC.DES_INDICADOR AS INDICADOR, "
-              +"DADOS.NR_PROT AS PROTOCOLO, " 
-              +"DADOS.SG_SECAO AS SIGLA_CARTORIO, "
-              +"CARTORIO.ID AS JN_CARTORIOID, "
-              +"OBSERV.ID, "
-              +"OBSERV.JUSTIFICATIVA, "
-              +"OBSERV.COMENTARIO_SABAD, "
-              +"0 AS FL_REG_NOVO "
-              +"FROM DW_CNJ.CNJ_DADOS DADOS "
-              +"INNER JOIN DW_CNJ.CNJ_INDICADORES INDIC ON INDIC.COD_INDICADOR = DADOS.COD_INDICADOR "
-              +"INNER JOIN JN_CARTORIO CARTORIO ON CARTORIO.SIGLA = DADOS.SG_SECAO "
-              +"LEFT JOIN JN_PRODSERV_OBS OBSERV ON (OBSERV.COD_INDICADOR = DADOS.COD_INDICADOR " 
-                                                   +"AND TO_CHAR(OBSERV.DT_REFERENCIA, 'YYYYMM') = TO_CHAR(DADOS.DAT_REFERENCIA, 'YYYYMM') " 
-                                                   +"AND OBSERV.PROTOCOLO = DADOS.NR_PROT) "
-              +"WHERE TO_CHAR(DADOS.DAT_REFERENCIA, 'YYYYMM') = ? "
-              +"AND DADOS.SG_SECAO = ? "
-              +"AND INDIC.COD_INDICADOR IN (20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, " 
-                                              +"33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44) "
-              +"AND (OBSERV.FL_REG_NOVO = 0 OR OBSERV.FL_REG_NOVO IS NULL) "
-              +"ORDER BY INDIC.DES_INDICADOR");
+      PreparedStatement pstmtQ1 = conn.prepareStatement("SELECT DADOS.COD_INDICADOR,\r\n" + 
+      		"DADOS.DAT_REFERENCIA AS DT_REFERENCIA,\r\n" + 
+      		"INDIC.DES_INDICADOR AS INDICADOR,\r\n" + 
+      		"DADOS.NR_PROT AS PROTOCOLO,\r\n" + 
+      		"DADOS.NR_PROCESSO AS PROCESSO,\r\n" + 
+      		"DADOS.CD_CLASSE_CNJ AS CLASSE,\r\n" + 
+      		"DADOS.DS_CLASSE AS DESC_CLASSE,\r\n" + 
+      		"DADOS.SG_CLASSE AS SG_CLASSE,\r\n" + 
+      		"DADOS.DS_ASSUNTO AS ASSUNTO,\r\n" + 
+      		"DADOS.SG_SECAO AS SIGLA_CARTORIO,\r\n" + 
+      		"CARTORIO.ID AS JN_CARTORIOID,\r\n" + 
+      		"OBSERV.ID,\r\n" + 
+      		"OBSERV.JUSTIFICATIVA,\r\n" + 
+      		"OBSERV.COMENTARIO_SABAD,\r\n" + 
+      		"CATEGORIAS.DES_CATEGORIA AS CATEGORIA,\r\n" + 
+      		"CNJINDIC.SGL_INDICADOR AS SIGLA_INDICADOR,\r\n" + 
+      		"0 AS FL_REG_NOVO  \r\n" + 
+      		"FROM DW_CNJ.CNJ_DADOS DADOS  \r\n" + 
+      		"INNER JOIN DW_CNJ.CNJ_INDICADORES INDIC ON INDIC.COD_INDICADOR = DADOS.COD_INDICADOR  \r\n" + 
+      		"INNER JOIN JN_CARTORIO CARTORIO ON CARTORIO.SIGLA = DADOS.SG_SECAO  \r\n" + 
+      		"INNER JOIN DW_CNJ.cnj_indicadores CNJINDIC ON CNJINDIC.COD_INDICADOR =  INDIC.COD_INDICADOR  \r\n" + 
+      		"INNER JOIN DW_CNJ.CNJ_CATEGORIAS CATEGORIAS ON CATEGORIAS.COD_CATEGORIA = CNJINDIC.COD_CATEGORIA  \r\n" + 
+      		"INNER JOIN dw_cnj.cnj_grupo GRP ON grp.cod_grupo = CATEGORIAS.COD_GRUPO \r\n" + 
+      		"LEFT JOIN JN_PRODSERV_OBS OBSERV ON (OBSERV.COD_INDICADOR = DADOS.COD_INDICADOR   \r\n" + 
+      		"                                     AND TO_CHAR(OBSERV.DT_REFERENCIA, 'YYYYMM') = TO_CHAR(DADOS.DAT_REFERENCIA, 'YYYYMM')   \r\n" + 
+      		"                                     AND OBSERV.PROTOCOLO = DADOS.NR_PROT)  \r\n" + 
+      		"WHERE TO_CHAR(DADOS.DAT_REFERENCIA, 'YYYYMM') = ?  \r\n" + 
+      		"AND DADOS.SG_SECAO = ?  \r\n" + 
+      		"AND CNJINDIC.COD_CATEGORIA IN (1, 2, 33, 34)  \r\n" + 
+      		"AND INDIC.GRAU_INDICADOR = ?  \r\n" + 
+      		"AND (OBSERV.FL_REG_NOVO = 0 OR OBSERV.FL_REG_NOVO IS NULL)  \r\n" + 
+      		"AND GRP.COD_GRUPO = ? \r\n" + 
+      		"ORDER BY INDIC.DES_INDICADOR");
       pstmtQ1.setString(1, sdf.format(dataReferencia));
       pstmtQ1.setString(2, secao);
+      pstmtQ1.setInt(3, grauIndicador);
+      pstmtQ1.setInt(4, idGrupoObservacao);
       ResultSet rsQ1 = pstmtQ1.executeQuery();
       while(rsQ1.next()) {
         Observacao obs = materializaObservacao(rsQ1);
@@ -254,7 +269,7 @@ public class JustificativaDao {
         conn = dataSource.getConnection();
         JasperReport report =
           (JasperReport) JRLoader.loadObject(this.getClass().getResourceAsStream(
-              "/RelObservacoesGeradasCompCartorio/IndicadoresEObservacoes.jasper"));
+              "/ObservacoesRespondidas/JustificativasRespostasCompCartorio.jasper"));
         JasperPrint jasperPrint = JasperFillManager.fillReport(report, map, conn);
         pdfFile = JasperExportManager.exportReportToPdf(jasperPrint);
       } catch (SQLException e) {
@@ -318,7 +333,9 @@ public class JustificativaDao {
     Connection conn = null;
     try {
       conn = dataSource.getConnection();
-      PreparedStatement pstmtQ = conn.prepareStatement("SELECT OBS.*, CARTORIO.SIGLA AS SIGLA_CARTORIO, INDIC.DES_INDICADOR AS INDICADOR "
+      PreparedStatement pstmtQ = conn.prepareStatement("SELECT OBS.*, CARTORIO.SIGLA AS SIGLA_CARTORIO, "
+      		+ "INDIC.DES_INDICADOR AS INDICADOR, '' as CATEGORIA,"
+      		+ "INDIC.SGL_INDICADOR AS SIGLA_INDICADOR "
           + "FROM JN_PRODSERV_OBS OBS "
           +"INNER JOIN JN_CARTORIO CARTORIO ON CARTORIO.ID = OBS.JN_CARTORIOID "
           +"INNER JOIN DW_CNJ.CNJ_INDICADORES INDIC ON INDIC.COD_INDICADOR = OBS.COD_INDICADOR "
@@ -343,6 +360,37 @@ public class JustificativaDao {
     return obs;
   }
   
+  /**
+   * 
+   * @return
+   */
+  public List<GrupoIndicador> getGruposIndicador() {
+  	List<GrupoIndicador> grupos = new ArrayList<GrupoIndicador>();
+  	Connection conn = null;
+  	try {
+			conn = dataSource.getConnection();
+			ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM DW_CNJ.CNJ_GRUPO "
+					+ "WHERE COD_GRUPO IN (1, 4)");
+			while(rs.next()) {
+				GrupoIndicador grupo = new GrupoIndicador();
+				grupo.setId(rs.getInt("COD_GRUPO"));
+				grupo.setDesGrupo(rs.getString("DES_GRUPO"));
+				grupos.add(grupo);
+			}
+		} catch (SQLException e) {
+			logger.error("Erro executando banco de dados", e);
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+  	
+  	return grupos;
+  }
+  
   private Observacao materializaObservacao(ResultSet rs) throws SQLException {
     Observacao obs = null;
     obs = new Observacao();
@@ -354,6 +402,17 @@ public class JustificativaDao {
     obs.setJustificativa(rs.getString("JUSTIFICATIVA"));
     obs.setFlRegNovo(rs.getInt("FL_REG_NOVO"));
     obs.setResposta(rs.getString("COMENTARIO_SABAD"));
+    obs.setCategoria(rs.getString("CATEGORIA"));    
+    obs.setSiglaIndicador(rs.getString("SIGLA_INDICADOR"));
+    
+    if(rs.getMetaData().getColumnCount() == 17) {
+    	obs.setProcesso(rs.getString("PROCESSO"));
+    	obs.setClasse(rs.getString("CLASSE"));
+    	obs.setDsClasse(rs.getString("DESC_CLASSE"));
+    	obs.setSgClasse(rs.getString("SG_CLASSE"));
+    	obs.setAssunto(rs.getString("ASSUNTO"));
+    }
+    
     Cartorio cart = new Cartorio();
     cart.setId(rs.getLong("JN_CARTORIOID"));
     cart.setSigla(rs.getString("SIGLA_CARTORIO"));

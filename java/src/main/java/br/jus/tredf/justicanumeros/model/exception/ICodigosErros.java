@@ -57,4 +57,7 @@ public interface ICodigosErros {
   public static final int REPORT_ERROR_GENERATION = 10122;
   
   public static final int ERRO_SAO_EXECUCAO = 10141;
+  public static final int ERRO_SAO_PROPOSTA_ORC = 10142;
+  
+  public static final int ERRO_IMPRESSOMETRO_GENERICO = 10151;
 }

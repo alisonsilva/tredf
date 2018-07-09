@@ -11,6 +11,10 @@ public interface ICodigosAcoes {
   public static final int ACAO_ATUALIZAR_ARQUIVO_EXECUCAO = 218;
   public static final int ACAO_REMOVER_ARQUIVO_EXECUCAO = 219;
   public static final int ACAO_USUARIO_ACESSANDO_SISTEMA = 220;
+  public static final int ACAO_ATUALIZAR_ARQUIVO_DOTACAO = 221;
+  public static final int ACAO_REMOVER_ARQUIVO_DOTACAO = 222;
+  public static final int ACAO_ATUALIZAR_ARQUIVO_PROPORC = 223;
+  public static final int ACAO_REMOVER_ARQUIVO_PROPORC = 223;
   
   public static final int ACAO_TERCEIRIZADO_INSERCAO = 311;
   public static final int ACAO_TERCEIRIZADO_REMOCAO = 312;

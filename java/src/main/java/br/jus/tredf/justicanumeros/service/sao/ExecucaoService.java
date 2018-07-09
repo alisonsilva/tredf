@@ -25,7 +25,7 @@ import br.jus.tredf.justicanumeros.model.Permissao;
 import br.jus.tredf.justicanumeros.model.exception.ICodigosErros;
 import br.jus.tredf.justicanumeros.model.exception.ParametroException;
 import br.jus.tredf.justicanumeros.model.sao.FormularioExecucao;
-import br.jus.tredf.justicanumeros.model.sao.SaoArquivoExecucao;
+import br.jus.tredf.justicanumeros.model.sao.ArquivoEnviadoSao;
 import br.jus.tredf.justicanumeros.model.wrapper.UsuarioVO;
 import br.jus.tredf.justicanumeros.service.FormulariosTREDFService;
 import br.jus.tredf.justicanumeros.util.AuthenticationService;
@@ -55,7 +55,7 @@ public class ExecucaoService extends FormulariosTREDFService {
   @Autowired
   private ExecucaoDao execucaoDao;
   
-  public void enviaArquivoExecucao(final SaoArquivoExecucao arquivo, String token) {
+  public void enviaArquivoExecucao(final ArquivoEnviadoSao arquivo, String token) {
   	if(arquivo == null || StringUtils.isEmpty(arquivo.getDataReferencia()) ) {
   		String msg = MessageFormat.format(bundle.getString("ExecucaoService.enviaarquivo.erro")
   				, "Arquivo inválido ou data de referência inválida");

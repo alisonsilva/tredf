@@ -73,7 +73,7 @@ public class UsuarioDao implements Serializable {
    * @return O usu�rio inserido com seu novo identificador.
    */
   public UsuarioVO inserirUsuario(UsuarioVO usuario) {
-    if(usuario == null || StringUtils.isEmpty(usuario.lgn)) {
+    if(usuario == null || StringUtils.isEmpty(usuario.cn)) {
       throw new ParametroException("Usu�rio vazio", ICodigosErros.ERRO_USUARIO_INCLUIR);
     }
     Long id = null;
@@ -235,6 +235,7 @@ public class UsuarioDao implements Serializable {
           c.setId(cartorioId);
           c.setNome(rs2.getString("NOME"));
           c.setSigla(rs2.getString("SIGLA"));
+          c.setGrauIndicador(rs2.getInt("GRAU_INDICADOR"));
           cartorios.add(c);
           rs2.close();
         }

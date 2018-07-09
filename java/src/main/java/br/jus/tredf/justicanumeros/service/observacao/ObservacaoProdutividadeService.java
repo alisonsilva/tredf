@@ -19,6 +19,7 @@ import br.jus.tredf.justicanumeros.model.Indicador;
 import br.jus.tredf.justicanumeros.model.Permissao;
 import br.jus.tredf.justicanumeros.model.exception.ICodigosErros;
 import br.jus.tredf.justicanumeros.model.exception.ParametroException;
+import br.jus.tredf.justicanumeros.model.justificativa.GrupoIndicador;
 import br.jus.tredf.justicanumeros.model.justificativa.Observacao;
 import br.jus.tredf.justicanumeros.service.FormulariosTREDFService;
 import br.jus.tredf.justicanumeros.util.AuthenticationService;
@@ -26,6 +27,8 @@ import br.jus.tredf.justicanumeros.util.PropertiesServiceController;
 
 @Service(value="ObservacaoProdutividadeService")
 public class ObservacaoProdutividadeService extends FormulariosTREDFService {
+	private static final int GRAU_INDICADOR_PRIMEIRA_INSTANCIA = 1;
+	
   @Autowired
   private ResourceBundle bundle;
   
@@ -47,11 +50,12 @@ public class ObservacaoProdutividadeService extends FormulariosTREDFService {
   @Autowired 
   private SadpDao sadpDao;  
   
-  public List<Observacao> getRegistrosProdutividadeComObservacao(Date dataReferencia, String secao, String token) {
+  public List<Observacao> getRegistrosProdutividadeComObservacao(Date dataReferencia, int idGrupoObservacao, 
+  		String secao, int grauIndicador, String token) {
     List<Permissao> permissoes = addNovaPermissaoList(null, 
         properties.getProperty("perm.formulario.alterar.campo.admlocal.usuario"));    
     validaTokenUsuario(token, permissoes);    
-    return justificativaDao.getRegistrosProdutividadeComObservacoes(dataReferencia, secao);
+    return justificativaDao.getRegistrosProdutividadeComObservacoes(dataReferencia, secao, grauIndicador, idGrupoObservacao);
   }
 
   public Observacao getObservacaoPorId(Observacao observacao, String token) {
@@ -72,14 +76,16 @@ public class ObservacaoProdutividadeService extends FormulariosTREDFService {
     List<Permissao> permissoes = addNovaPermissaoList(null, 
         properties.getProperty("perm.formulario.alterar.campo.admlocal.usuario"));    
     validaTokenUsuario(token, permissoes);
-    if(!sadpDao.isProtocoloValidoSadp(Long.valueOf(observacao.getProtocolo()))) {
+    Cartorio cartorio = cartorioDao.getCartorioPorId(observacao.getCartorio().getId());
+    if(cartorio.getGrauIndicador() == GRAU_INDICADOR_PRIMEIRA_INSTANCIA && 
+    		!sadpDao.isProtocoloValidoSadp(Long.valueOf(observacao.getProtocolo()))) {
       throw new ParametroException(
           bundle.getString("ProdutividadeServentiaService.validacaonumeroprotocolo"), 
           ICodigosErros.ERRO_SADP_PROTOCOLOINVALIDO);
     }
     
     
-    if(observacao.getId() > 0 ) {
+    if(observacao.getId() > 0 ) {// observação existe
       justificativaDao.alterarObservacao(observacao);
       String logMessage = 
           MessageFormat.format(
@@ -101,7 +107,7 @@ public class ObservacaoProdutividadeService extends FormulariosTREDFService {
     if(StringUtils.isEmpty(idCartorio)) {
       throw new ParametroException("Cart�rio inv�lido", ICodigosErros.ERRO_SERVENTIAS_PARAMETROSINVALIDOS);
     }
-    Cartorio cartorio = cartorioDao.getCartorioPorId(Integer.valueOf(idCartorio));
+    Cartorio cartorio = cartorioDao.getCartorioPorId(Long.valueOf(idCartorio));
     return justificativaDao.reportOrderPorCartorioIntoPDF(competencia, cartorio.getSigla());
   }
 
@@ -110,7 +116,7 @@ public class ObservacaoProdutividadeService extends FormulariosTREDFService {
     if(idCartorio == 0) {
       ret = justificativaDao.reportOrderPorCompetenciaIntoPDF(competencia);
     } else {
-      Cartorio cartorio = cartorioDao.getCartorioPorId(Integer.valueOf(idCartorio));
+      Cartorio cartorio = cartorioDao.getCartorioPorId(Long.valueOf(idCartorio));
       ret = justificativaDao.reportOrderPorCartorioIntoPDF(competencia, cartorio.getSigla());
     }
     return ret;
@@ -131,6 +137,10 @@ public class ObservacaoProdutividadeService extends FormulariosTREDFService {
   
   public List<Cartorio> getCartorios() {
     return cartorioDao.getCartorios();
+  }
+  
+  public List<GrupoIndicador> getGruposIndicadores() {
+  	return justificativaDao.getGruposIndicador();
   }
   
   public List<Indicador> getIndicadores() {

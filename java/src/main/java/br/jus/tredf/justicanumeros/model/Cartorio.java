@@ -16,6 +16,7 @@ public class Cartorio implements Serializable {
   @XmlAttribute private Long id;
   @XmlAttribute private String nome;
   @XmlAttribute private String sigla;
+  @XmlAttribute private int grauIndicador;
   
   
   public Long getId() {
@@ -35,10 +36,15 @@ public class Cartorio implements Serializable {
   }
   public void setSigla(String sigla) {
     this.sigla = sigla;
-  }
-  
-  @Override
+  }  
+  public int getGrauIndicador() {
+		return grauIndicador;
+	}
+	public void setGrauIndicador(int grauIndicador) {
+		this.grauIndicador = grauIndicador;
+	}
+	@Override
   public String toString() {
-    return "{id: " + id + ", nome : " + nome + ", sigla : " + sigla + "}";
+    return "{id: " + id + ", nome : " + nome + ", sigla : " + sigla + ", grauIndicador: " + grauIndicador + "}";
   }
 }

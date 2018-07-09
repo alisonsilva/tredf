@@ -23,7 +23,7 @@ import com.google.gson.stream.JsonReader;
 
 import br.jus.tredf.justicanumeros.model.exception.ParametroException;
 import br.jus.tredf.justicanumeros.model.sao.FormularioExecucao;
-import br.jus.tredf.justicanumeros.model.sao.SaoArquivoExecucao;
+import br.jus.tredf.justicanumeros.model.sao.ArquivoEnviadoSao;
 import br.jus.tredf.justicanumeros.model.wrapper.UsuarioVO;
 import br.jus.tredf.justicanumeros.service.sao.ExecucaoService;
 import br.jus.tredf.justicanumeros.util.AuthenticationService;
@@ -45,15 +45,15 @@ public class ExecucaoController {
 	@RequestMapping(value = "/upload/", 
 			method = RequestMethod.POST,
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<EnvioXmlOut> upload(@RequestParam("arquivoExecucao") MultipartFile arquivoExecucao,
+	public ResponseEntity<EnvioXmlExecucaoOut> upload(@RequestParam("arquivoExecucao") MultipartFile arquivoExecucao,
 			@RequestParam("token") String token,
 			@RequestParam("dtReferencia") String dtReferencia,
 			ModelMap modelMap) {
-    ResponseEntity<EnvioXmlOut> ret = new ResponseEntity<EnvioXmlOut>(HttpStatus.OK);
+    ResponseEntity<EnvioXmlExecucaoOut> ret = new ResponseEntity<EnvioXmlExecucaoOut>(HttpStatus.OK);
 
 		try {
       UsuarioVO usuario = authenticationService.getUsuarioFromToken(token);
-			SaoArquivoExecucao arquivo = new SaoArquivoExecucao();
+			ArquivoEnviadoSao arquivo = new ArquivoEnviadoSao();
 			arquivo.setLength(arquivoExecucao.getSize());
 			arquivo.setBytes(arquivoExecucao.getBytes());
 			arquivo.setType(arquivoExecucao.getContentType());
@@ -62,25 +62,25 @@ public class ExecucaoController {
 			arquivo.setDataReferencia(dtReferencia);
 			execucaoService.enviaArquivoExecucao(arquivo, token);
 
-	    EnvioXmlOut retfor = new EnvioXmlOut();
+	    EnvioXmlExecucaoOut retfor = new EnvioXmlExecucaoOut();
 	    retfor.token = token;
 	    retfor.codigo = 0;
 	    retfor.mensagem = bundle.getString("ExecucaoController.arquivoenviado.sucesso");
-	    ret = new ResponseEntity<EnvioXmlOut>(retfor, new HttpHeaders(), HttpStatus.OK);
+	    ret = new ResponseEntity<EnvioXmlExecucaoOut>(retfor, new HttpHeaders(), HttpStatus.OK);
 		} catch(ParametroException pex) {
       HttpHeaders responseHeaders = new HttpHeaders();
       responseHeaders.add("ExceptionCause", pex.getMessage());
-      EnvioXmlOut retf = new EnvioXmlOut();
+      EnvioXmlExecucaoOut retf = new EnvioXmlExecucaoOut();
       retf.codigo = pex.getCodigoErro();
       retf.mensagem = pex.getMessage();
-      ret = new ResponseEntity<EnvioXmlOut>(retf, responseHeaders, HttpStatus.UNAUTHORIZED);
+      ret = new ResponseEntity<EnvioXmlExecucaoOut>(retf, responseHeaders, HttpStatus.UNAUTHORIZED);
     } catch (Exception e) {
       HttpHeaders responseHeaders = new HttpHeaders();
       responseHeaders.add("ExceptionCause", e.getMessage());
-      EnvioXmlOut retf = new EnvioXmlOut();
+      EnvioXmlExecucaoOut retf = new EnvioXmlExecucaoOut();
       retf.codigo = HttpStatus.EXPECTATION_FAILED.value();
       retf.mensagem = e.getMessage();
-      ret = new ResponseEntity<EnvioXmlOut>(retf, responseHeaders, HttpStatus.NOT_ACCEPTABLE);
+      ret = new ResponseEntity<EnvioXmlExecucaoOut>(retf, responseHeaders, HttpStatus.NOT_ACCEPTABLE);
     }
 		return ret;
 	}
@@ -88,38 +88,38 @@ public class ExecucaoController {
   @RequestMapping(value = "/formulariosExecucao/", 
       method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<EnvioXmlOut> formulariosExecucao(@RequestBody String req, 
+  public ResponseEntity<EnvioXmlExecucaoOut> formulariosExecucao(@RequestBody String req, 
       UriComponentsBuilder ucBuilder) {
-    ResponseEntity<EnvioXmlOut> ret = new ResponseEntity<EnvioXmlOut>(HttpStatus.OK);
+    ResponseEntity<EnvioXmlExecucaoOut> ret = new ResponseEntity<EnvioXmlExecucaoOut>(HttpStatus.OK);
 
     Gson gson = new Gson();
     JsonReader reader = new JsonReader(new StringReader(req));
     reader.setLenient(true);
     try {
-      EnvioXmlIn prodObs = gson.fromJson(reader, EnvioXmlIn.class);
+      EnvioXmlExecucaoIn prodObs = gson.fromJson(reader, EnvioXmlExecucaoIn.class);
       List<FormularioExecucao> formularios = execucaoService.getFormulariosExecucao(prodObs.token);
       HttpHeaders headers = new HttpHeaders();
       UsuarioVO usuario = authenticationService.getUsuarioFromToken(prodObs.token);
-      EnvioXmlOut retfor = new EnvioXmlOut();
+      EnvioXmlExecucaoOut retfor = new EnvioXmlExecucaoOut();
       retfor.token = authenticationService.criaToken(usuario.lgn, usuario.sn);
       retfor.codigo = 0;
       retfor.mensagem = "Formulários recuperados com sucesso";
       retfor.formularios = formularios;
-      ret = new ResponseEntity<EnvioXmlOut>(retfor, headers, HttpStatus.OK);
+      ret = new ResponseEntity<EnvioXmlExecucaoOut>(retfor, headers, HttpStatus.OK);
     } catch(ParametroException pex) {
       HttpHeaders responseHeaders = new HttpHeaders();
       responseHeaders.add("ExceptionCause", pex.getMessage());
-      EnvioXmlOut retf = new EnvioXmlOut();
+      EnvioXmlExecucaoOut retf = new EnvioXmlExecucaoOut();
       retf.codigo = pex.getCodigoErro();
       retf.mensagem = pex.getMessage();
-      ret = new ResponseEntity<EnvioXmlOut>(retf, responseHeaders, HttpStatus.UNAUTHORIZED);
+      ret = new ResponseEntity<EnvioXmlExecucaoOut>(retf, responseHeaders, HttpStatus.UNAUTHORIZED);
     } catch (Exception e) {
       HttpHeaders responseHeaders = new HttpHeaders();
       responseHeaders.add("ExceptionCause", e.getMessage());
-      EnvioXmlOut retf = new EnvioXmlOut();
+      EnvioXmlExecucaoOut retf = new EnvioXmlExecucaoOut();
       retf.codigo = HttpStatus.EXPECTATION_FAILED.value();
       retf.mensagem = e.getMessage();
-      ret = new ResponseEntity<EnvioXmlOut>(retf, responseHeaders, HttpStatus.NOT_ACCEPTABLE);
+      ret = new ResponseEntity<EnvioXmlExecucaoOut>(retf, responseHeaders, HttpStatus.NOT_ACCEPTABLE);
     }
     return ret;
   } 	
@@ -127,38 +127,38 @@ public class ExecucaoController {
   @RequestMapping(value = "/formulariosExecucaoPorId/", 
       method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<EnvioXmlOut> formulariosExecucaoPorId(@RequestBody String req, 
+  public ResponseEntity<EnvioXmlExecucaoOut> formulariosExecucaoPorId(@RequestBody String req, 
       UriComponentsBuilder ucBuilder) {
-    ResponseEntity<EnvioXmlOut> ret = new ResponseEntity<EnvioXmlOut>(HttpStatus.OK);
+    ResponseEntity<EnvioXmlExecucaoOut> ret = new ResponseEntity<EnvioXmlExecucaoOut>(HttpStatus.OK);
 
     Gson gson = new Gson();
     JsonReader reader = new JsonReader(new StringReader(req));
     reader.setLenient(true);
     try {
-      EnvioXmlIn prodObs = gson.fromJson(reader, EnvioXmlIn.class);
+      EnvioXmlExecucaoIn prodObs = gson.fromJson(reader, EnvioXmlExecucaoIn.class);
       FormularioExecucao formulario = execucaoService.getFormularioExecucaoPorId(prodObs.token, prodObs.idFormulario);
       HttpHeaders headers = new HttpHeaders();
       UsuarioVO usuario = authenticationService.getUsuarioFromToken(prodObs.token);
-      EnvioXmlOut retfor = new EnvioXmlOut();
+      EnvioXmlExecucaoOut retfor = new EnvioXmlExecucaoOut();
       retfor.token = authenticationService.criaToken(usuario.lgn, usuario.sn);
       retfor.codigo = 0;
       retfor.mensagem = "Formulário recuperado com sucesso";
       retfor.formulario = formulario;
-      ret = new ResponseEntity<EnvioXmlOut>(retfor, headers, HttpStatus.OK);
+      ret = new ResponseEntity<EnvioXmlExecucaoOut>(retfor, headers, HttpStatus.OK);
     } catch(ParametroException pex) {
       HttpHeaders responseHeaders = new HttpHeaders();
       responseHeaders.add("ExceptionCause", pex.getMessage());
-      EnvioXmlOut retf = new EnvioXmlOut();
+      EnvioXmlExecucaoOut retf = new EnvioXmlExecucaoOut();
       retf.codigo = pex.getCodigoErro();
       retf.mensagem = pex.getMessage();
-      ret = new ResponseEntity<EnvioXmlOut>(retf, responseHeaders, HttpStatus.UNAUTHORIZED);
+      ret = new ResponseEntity<EnvioXmlExecucaoOut>(retf, responseHeaders, HttpStatus.UNAUTHORIZED);
     } catch (Exception e) {
       HttpHeaders responseHeaders = new HttpHeaders();
       responseHeaders.add("ExceptionCause", e.getMessage());
-      EnvioXmlOut retf = new EnvioXmlOut();
+      EnvioXmlExecucaoOut retf = new EnvioXmlExecucaoOut();
       retf.codigo = HttpStatus.EXPECTATION_FAILED.value();
       retf.mensagem = e.getMessage();
-      ret = new ResponseEntity<EnvioXmlOut>(retf, responseHeaders, HttpStatus.NOT_ACCEPTABLE);
+      ret = new ResponseEntity<EnvioXmlExecucaoOut>(retf, responseHeaders, HttpStatus.NOT_ACCEPTABLE);
     }
     return ret;
   } 	  
@@ -166,39 +166,39 @@ public class ExecucaoController {
   @RequestMapping(value = "/formulariosExecucaoPorCompetencia/", 
       method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<EnvioXmlOut> formulariosExecucaoPorCompetencia(@RequestBody String req, 
+  public ResponseEntity<EnvioXmlExecucaoOut> formulariosExecucaoPorCompetencia(@RequestBody String req, 
       UriComponentsBuilder ucBuilder) {
-    ResponseEntity<EnvioXmlOut> ret = new ResponseEntity<EnvioXmlOut>(HttpStatus.OK);
+    ResponseEntity<EnvioXmlExecucaoOut> ret = new ResponseEntity<EnvioXmlExecucaoOut>(HttpStatus.OK);
 
     Gson gson = new Gson();
     JsonReader reader = new JsonReader(new StringReader(req));
     reader.setLenient(true);
     try {
-      EnvioXmlIn prodObs = gson.fromJson(reader, EnvioXmlIn.class);
+      EnvioXmlExecucaoIn prodObs = gson.fromJson(reader, EnvioXmlExecucaoIn.class);
       FormularioExecucao formulario = 
       		execucaoService.getFormularioExecucaoPorDtReferencia(prodObs.token, prodObs.competencia);
       HttpHeaders headers = new HttpHeaders();
       UsuarioVO usuario = authenticationService.getUsuarioFromToken(prodObs.token);
-      EnvioXmlOut retfor = new EnvioXmlOut();
+      EnvioXmlExecucaoOut retfor = new EnvioXmlExecucaoOut();
       retfor.token = authenticationService.criaToken(usuario.lgn, usuario.sn);
       retfor.codigo = 0;
       retfor.mensagem = "Formulário recuperado com sucesso";
       retfor.formulario = formulario;
-      ret = new ResponseEntity<EnvioXmlOut>(retfor, headers, HttpStatus.OK);
+      ret = new ResponseEntity<EnvioXmlExecucaoOut>(retfor, headers, HttpStatus.OK);
     } catch(ParametroException pex) {
       HttpHeaders responseHeaders = new HttpHeaders();
       responseHeaders.add("ExceptionCause", pex.getMessage());
-      EnvioXmlOut retf = new EnvioXmlOut();
+      EnvioXmlExecucaoOut retf = new EnvioXmlExecucaoOut();
       retf.codigo = pex.getCodigoErro();
       retf.mensagem = pex.getMessage();
-      ret = new ResponseEntity<EnvioXmlOut>(retf, responseHeaders, HttpStatus.UNAUTHORIZED);
+      ret = new ResponseEntity<EnvioXmlExecucaoOut>(retf, responseHeaders, HttpStatus.UNAUTHORIZED);
     } catch (Exception e) {
       HttpHeaders responseHeaders = new HttpHeaders();
       responseHeaders.add("ExceptionCause", e.getMessage());
-      EnvioXmlOut retf = new EnvioXmlOut();
+      EnvioXmlExecucaoOut retf = new EnvioXmlExecucaoOut();
       retf.codigo = HttpStatus.EXPECTATION_FAILED.value();
       retf.mensagem = e.getMessage();
-      ret = new ResponseEntity<EnvioXmlOut>(retf, responseHeaders, HttpStatus.NOT_ACCEPTABLE);
+      ret = new ResponseEntity<EnvioXmlExecucaoOut>(retf, responseHeaders, HttpStatus.NOT_ACCEPTABLE);
     }
     return ret;
   }   
@@ -206,35 +206,35 @@ public class ExecucaoController {
   @RequestMapping(value = "/testeEnvioArquivo/", 
       method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<EnvioXmlOut> testeEnvioArquivo(@RequestBody String req, 
+  public ResponseEntity<EnvioXmlExecucaoOut> testeEnvioArquivo(@RequestBody String req, 
       UriComponentsBuilder ucBuilder) {
-    ResponseEntity<EnvioXmlOut> ret = new ResponseEntity<EnvioXmlOut>(HttpStatus.OK);
+    ResponseEntity<EnvioXmlExecucaoOut> ret = new ResponseEntity<EnvioXmlExecucaoOut>(HttpStatus.OK);
 
     Gson gson = new Gson();
     JsonReader reader = new JsonReader(new StringReader(req));
     reader.setLenient(true);
     try {
-      EnvioXmlIn prodObs = gson.fromJson(reader, EnvioXmlIn.class);
+      EnvioXmlExecucaoIn prodObs = gson.fromJson(reader, EnvioXmlExecucaoIn.class);
       execucaoService.testeEnvioArquivo(prodObs.nomeArquivo);
       HttpHeaders headers = new HttpHeaders();
-      EnvioXmlOut retfor = new EnvioXmlOut();
+      EnvioXmlExecucaoOut retfor = new EnvioXmlExecucaoOut();
       retfor.codigo = 0;
       retfor.mensagem = "Envios recuperados com sucesso";
-      ret = new ResponseEntity<EnvioXmlOut>(retfor, headers, HttpStatus.OK);
+      ret = new ResponseEntity<EnvioXmlExecucaoOut>(retfor, headers, HttpStatus.OK);
     } catch(ParametroException pex) {
       HttpHeaders responseHeaders = new HttpHeaders();
       responseHeaders.add("ExceptionCause", pex.getMessage());
-      EnvioXmlOut retf = new EnvioXmlOut();
+      EnvioXmlExecucaoOut retf = new EnvioXmlExecucaoOut();
       retf.codigo = pex.getCodigoErro();
       retf.mensagem = pex.getMessage();
-      ret = new ResponseEntity<EnvioXmlOut>(retf, responseHeaders, HttpStatus.UNAUTHORIZED);
+      ret = new ResponseEntity<EnvioXmlExecucaoOut>(retf, responseHeaders, HttpStatus.UNAUTHORIZED);
     } catch (Exception e) {
       HttpHeaders responseHeaders = new HttpHeaders();
       responseHeaders.add("ExceptionCause", e.getMessage());
-      EnvioXmlOut retf = new EnvioXmlOut();
+      EnvioXmlExecucaoOut retf = new EnvioXmlExecucaoOut();
       retf.codigo = HttpStatus.EXPECTATION_FAILED.value();
       retf.mensagem = e.getMessage();
-      ret = new ResponseEntity<EnvioXmlOut>(retf, responseHeaders, HttpStatus.NOT_ACCEPTABLE);
+      ret = new ResponseEntity<EnvioXmlExecucaoOut>(retf, responseHeaders, HttpStatus.NOT_ACCEPTABLE);
     }
     return ret;
   } 	
@@ -243,51 +243,51 @@ public class ExecucaoController {
   @RequestMapping(value = "/apagarArquivoExecucao/", 
       method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<EnvioXmlOut> apagarArquivoExecucao(@RequestBody String req, 
+  public ResponseEntity<EnvioXmlExecucaoOut> apagarArquivoExecucao(@RequestBody String req, 
       UriComponentsBuilder ucBuilder) {
-    ResponseEntity<EnvioXmlOut> ret = new ResponseEntity<EnvioXmlOut>(HttpStatus.OK);
+    ResponseEntity<EnvioXmlExecucaoOut> ret = new ResponseEntity<EnvioXmlExecucaoOut>(HttpStatus.OK);
 
     Gson gson = new Gson();
     JsonReader reader = new JsonReader(new StringReader(req));
     reader.setLenient(true);
     try {
-      EnvioXmlIn prodObs = gson.fromJson(reader, EnvioXmlIn.class);
+      EnvioXmlExecucaoIn prodObs = gson.fromJson(reader, EnvioXmlExecucaoIn.class);
       execucaoService.apagarFormularioExecucao(prodObs.token, prodObs.idFormulario);
       HttpHeaders headers = new HttpHeaders();
       UsuarioVO usuario = authenticationService.getUsuarioFromToken(prodObs.token);
-      EnvioXmlOut retfor = new EnvioXmlOut();
+      EnvioXmlExecucaoOut retfor = new EnvioXmlExecucaoOut();
       retfor.token = authenticationService.criaToken(usuario.lgn, usuario.sn);
       retfor.codigo = 0;
       retfor.mensagem = "Formulário apagado com sucesso";
-      ret = new ResponseEntity<EnvioXmlOut>(retfor, headers, HttpStatus.OK);
+      ret = new ResponseEntity<EnvioXmlExecucaoOut>(retfor, headers, HttpStatus.OK);
     } catch(ParametroException pex) {
       HttpHeaders responseHeaders = new HttpHeaders();
       responseHeaders.add("ExceptionCause", pex.getMessage());
-      EnvioXmlOut retf = new EnvioXmlOut();
+      EnvioXmlExecucaoOut retf = new EnvioXmlExecucaoOut();
       retf.codigo = pex.getCodigoErro();
       retf.mensagem = pex.getMessage();
-      ret = new ResponseEntity<EnvioXmlOut>(retf, responseHeaders, HttpStatus.UNAUTHORIZED);
+      ret = new ResponseEntity<EnvioXmlExecucaoOut>(retf, responseHeaders, HttpStatus.UNAUTHORIZED);
     } catch (Exception e) {
       HttpHeaders responseHeaders = new HttpHeaders();
       responseHeaders.add("ExceptionCause", e.getMessage());
-      EnvioXmlOut retf = new EnvioXmlOut();
+      EnvioXmlExecucaoOut retf = new EnvioXmlExecucaoOut();
       retf.codigo = HttpStatus.EXPECTATION_FAILED.value();
       retf.mensagem = e.getMessage();
-      ret = new ResponseEntity<EnvioXmlOut>(retf, responseHeaders, HttpStatus.NOT_ACCEPTABLE);
+      ret = new ResponseEntity<EnvioXmlExecucaoOut>(retf, responseHeaders, HttpStatus.NOT_ACCEPTABLE);
     }
     return ret;
   }   
 }
 
 
-class EnvioXmlIn {
+class EnvioXmlExecucaoIn {
   public String token;
   public String competencia;
   public Long idFormulario;
   public String nomeArquivo;
 }
 
-class EnvioXmlOut {
+class EnvioXmlExecucaoOut {
   public int codigo;
   public String mensagem;
   public String token; 

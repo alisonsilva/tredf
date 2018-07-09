@@ -21,6 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.jus.tredf.justicanumeros.model.Cartorio;
 import br.jus.tredf.justicanumeros.model.Indicador;
 import br.jus.tredf.justicanumeros.model.exception.ParametroException;
+import br.jus.tredf.justicanumeros.model.justificativa.GrupoIndicador;
 import br.jus.tredf.justicanumeros.model.justificativa.Observacao;
 import br.jus.tredf.justicanumeros.model.wrapper.UsuarioVO;
 import br.jus.tredf.justicanumeros.service.observacao.ObservacaoProdutividadeService;
@@ -41,6 +42,7 @@ public class ObservacaoProdutividadeController {
   @Autowired
   private ObservacaoProdutividadeService observacaoService;
   
+  
   @RequestMapping(value = "/produtividadesComObservacao/", 
       method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE)
@@ -55,9 +57,13 @@ public class ObservacaoProdutividadeController {
       ObservacaoProdIn prodObs = gson.fromJson(reader, ObservacaoProdIn.class);
       SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
       Date dtRef = sdf.parse(prodObs.observacao.getDtReferenciaStr());
+      int grauIndicador = prodObs.observacao.getCartorio().getGrauIndicador();
       List<Observacao> observacoes = observacaoService.getRegistrosProdutividadeComObservacao(
           dtRef, 
-          prodObs.observacao.getCartorio().getSigla(), prodObs.token);
+          prodObs.observacao.getGrupoObservacao(),
+          prodObs.observacao.getCartorio().getSigla(),
+          grauIndicador,
+          prodObs.token);
       HttpHeaders headers = new HttpHeaders();
       UsuarioVO usuario = authenticationService.getUsuarioFromToken(prodObs.token);
       ObservacaoProdOut retfor = new ObservacaoProdOut();
@@ -255,6 +261,26 @@ public class ObservacaoProdutividadeController {
       HttpHeaders responseHeaders = new HttpHeaders();
       responseHeaders.add("ExceptionCause", e.getMessage());
       ret = new ResponseEntity<List<Cartorio>>(responseHeaders, HttpStatus.OK);
+    }
+    return ret;
+  }    
+  
+  @RequestMapping(value = "/getGruposIndicadores", 
+      method = RequestMethod.GET, 
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<List<GrupoIndicador>> getGrupoIndicadores() {
+    List<GrupoIndicador> areasAtuacao = null;
+    ResponseEntity<List<GrupoIndicador>> ret = 
+        new ResponseEntity<List<GrupoIndicador>>(HttpStatus.OK);
+    try {
+      areasAtuacao = observacaoService.getGruposIndicadores();
+      if(areasAtuacao != null) {
+        ret = new ResponseEntity<List<GrupoIndicador>>(areasAtuacao, HttpStatus.OK);
+      }
+    } catch (Exception e) {
+      HttpHeaders responseHeaders = new HttpHeaders();
+      responseHeaders.add("ExceptionCause", e.getMessage());
+      ret = new ResponseEntity<List<GrupoIndicador>>(responseHeaders, HttpStatus.OK);
     }
     return ret;
   }    

@@ -20,9 +20,10 @@ public class FormularioExecucao implements Serializable {
 	private Date dtReferencia;
 	private String dtUploadStr;
 	private String dtReferenciaStr;
+	private int flag;
 	
 	private UsuarioVO usuario;
-	private List<Execucao> execucao = new LinkedList<Execucao>();
+	private List<IArquivo> execucao = new LinkedList<IArquivo>();
 	
 	
 	public long getId() {
@@ -47,10 +48,10 @@ public class FormularioExecucao implements Serializable {
 	public void setUsuario(UsuarioVO usuario) {
 		this.usuario = usuario;
 	}
-	public List<Execucao> getExecucao() {
+	public List<IArquivo> getExecucao() {
 		return execucao;
 	}
-	public void setExecucao(List<Execucao> execucao) {
+	public void setExecucao(List<IArquivo> execucao) {
 		this.execucao = execucao;
 	}
 	public Date getDtReferencia() {
@@ -103,4 +104,11 @@ public class FormularioExecucao implements Serializable {
 		cal.set(Calendar.DAY_OF_MONTH, 1);
 		return cal.getTime();
 	}
+	public int getFlag() {
+		return flag;
+	}
+	public void setFlag(int flag) {
+		this.flag = flag;
+	}
+	
 }

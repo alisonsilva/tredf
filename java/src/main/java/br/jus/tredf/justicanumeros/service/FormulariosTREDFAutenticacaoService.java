@@ -54,13 +54,13 @@ public class FormulariosTREDFAutenticacaoService {
           ICodigosErros.ERRO_FORMULARIOSSERVICE_VALIDARPERMUSUARIO);
     }
     UsuarioVO usr = activeDirectoryService.getDadosUsuario(login.toLowerCase(), senha);
-    UsuarioVO usrLocal = usuarioDao.recuperarUsuarioPorLogin(usr.lgn.toLowerCase());
+    UsuarioVO usrLocal = usuarioDao.recuperarUsuarioPorLogin(usr.cn.toLowerCase());
     if(usrLocal == null) {
       usr = usuarioDao.inserirUsuario(usr);
     } else {
       usr.id = usrLocal.id;
     }
-    List<GrupoVO> grupos = grupoDao.getGruposPorLogin(usr.lgn);
+    List<GrupoVO> grupos = grupoDao.getGruposPorLogin(usr.cn);
     usr.grupos = grupos;
     return usr;
   }
