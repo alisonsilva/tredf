@@ -1,0 +1,1 @@
+<workflow-app xmlns="uri:oozie:workflow:0.5" name="test.workflow"><start /><end name="end"/></workflow-app><!--<workflow><node name="start" x="50" y="100"/><node name="end" x="500" y="100"/></workflow>-->
