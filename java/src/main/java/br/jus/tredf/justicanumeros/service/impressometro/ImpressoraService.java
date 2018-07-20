@@ -5,7 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import br.jus.tredf.justicanumeros.dao.LogAcoesDao;
@@ -31,8 +33,14 @@ public class ImpressoraService {
 	
   @Autowired
   private SnmpService snmpService;
+	
+  @Value("${printercounter.snmp.ativo}")
+	private String realizarVarredura;
   
   public List<ImpressoraDto> coletaInformacoesImpressoras() {
+  	if(StringUtils.isEmpty(realizarVarredura) || !Boolean.valueOf(realizarVarredura)) {
+  		return null;
+  	}
   	List<Impressora> impressoras = impressoraDao.getAllImpressoras();
   	List<ImpressoraDto> impressorasNaRede = new ArrayList<ImpressoraDto>();
   	
