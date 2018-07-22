@@ -1,0 +1,143 @@
+2018-07-20T14:38:16.907985-03:00
+Errors in file /ora00/app/oracle/diag/rdbms/adm/ADM/trace/ADM_ora_45402.trc  (incident=1412508):
+ORA-00600: código de erro interno, argumentos: [qksvcGetGuardCol:2], [93828], [0], [], [], [], [], [], [], [], [], []
+Incident details in: /ora00/app/oracle/diag/rdbms/adm/ADM/incident/incdir_1412508/ADM_ora_45402_i1412508.trc
+2018-07-20T14:38:18.916950-03:00
+Use ADRCI or Support Workbench to package the incident.
+See Note 411.1 at My Oracle Support for error and packaging details.
+2018-07-20T14:38:19.178446-03:00
+Dumping diagnostic data in directory=[cdmp_20180720143819], requested by (instance=1, osid=45402), summary=[incident=1412508].
+2018-07-20T14:38:26.025354-03:00
+Errors in file /ora00/app/oracle/diag/rdbms/adm/ADM/trace/ADM_ora_45402.trc  (incident=1412509):
+ORA-00600: código de erro interno, argumentos: [qksvcGetGuardCol:2], [93828], [0], [], [], [], [], [], [], [], [], []
+Incident details in: /ora00/app/oracle/diag/rdbms/adm/ADM/incident/incdir_1412509/ADM_ora_45402_i1412509.trc
+2018-07-20T14:38:27.735914-03:00
+Use ADRCI or Support Workbench to package the incident.
+See Note 411.1 at My Oracle Support for error and packaging details.
+2018-07-20T14:38:27.978682-03:00
+Dumping diagnostic data in directory=[cdmp_20180720143827], requested by (instance=1, osid=45402), summary=[incident=1412509].
+2018-07-20T14:38:41.619083-03:00
+Errors in file /ora00/app/oracle/diag/rdbms/adm/ADM/trace/ADM_ora_45402.trc  (incident=1412510):
+ORA-00600: código de erro interno, argumentos: [qksvcGetGuardCol:2], [93828], [0], [], [], [], [], [], [], [], [], []
+Incident details in: /ora00/app/oracle/diag/rdbms/adm/ADM/incident/incdir_1412510/ADM_ora_45402_i1412510.trc
+2018-07-20T14:38:43.181443-03:00
+Use ADRCI or Support Workbench to package the incident.
+See Note 411.1 at My Oracle Support for error and packaging details.
+2018-07-20T14:38:44.140767-03:00
+Dumping diagnostic data in directory=[cdmp_20180720143844], requested by (instance=1, osid=45402), summary=[incident=1412510].
+2018-07-20T14:39:23.275203-03:00
+Errors in file /ora00/app/oracle/diag/rdbms/adm/ADM/trace/ADM_ora_45402.trc  (incident=1412511):
+ORA-00600: código de erro interno, argumentos: [qksvcGetGuardCol:2], [93828], [0], [], [], [], [], [], [], [], [], []
+Incident details in: /ora00/app/oracle/diag/rdbms/adm/ADM/incident/incdir_1412511/ADM_ora_45402_i1412511.trc
+2018-07-20T14:39:24.835944-03:00
+Use ADRCI or Support Workbench to package the incident.
+See Note 411.1 at My Oracle Support for error and packaging details.
+2018-07-20T14:39:25.273671-03:00
+Dumping diagnostic data in directory=[cdmp_20180720143925], requested by (instance=1, osid=45402), summary=[incident=1412511].
+2018-07-20T14:39:38.950716-03:00
+Error 2396 trapped in 2PC on transaction 26.8.503579. Cleaning up.
+Error in cleaning up 2PC subordinates; error stack:
+ORA-01012: log-on não estabelecido
+ORA-02063: precedendo line a partir de TSE_NOVO
+ORA-02396: tempo inativo máximo excedido; conecte-se novamente
+ORA-02063: precedendo line a partir de TSE_NOVO
+ORA-02051: Outra sessão ou ramificação na mesma transação falhou ou foi finalizada
+ORA-02063: precedendo line a partir de TSE
+DISTRIB TRAN ADM.f3402b94.26.8.503579
+Error received from TSE_NOVO
+Error stack returned to user:
+ORA-02396: tempo inativo máximo excedido; conecte-se novamente
+ORA-02063: precedendo line a partir de TSE_NOVO
+ORA-02051: Outra sessão ou ramificação na mesma transação falhou ou foi finalizada
+ORA-02063: precedendo line a partir de TSE
+
+2018-07-20T14:47:03.395094-03:00
+Resize operation completed for file# 326, old size 7438336K, new size 7442432K
+2018-07-20T15:05:08.588752-03:00
+Beginning log switch checkpoint up to RBA [0x1fe.2.10], SCN: 485665892892
+2018-07-20T15:05:08.588912-03:00
+Thread 1 advanced to log sequence 510 (LGWR switch)
+  Current log# 5 seq# 510 mem# 0: /ora01/oradata/adm/adm/redo0502.rdo
+  Current log# 5 seq# 510 mem# 1: /ora01/oradata/adm/adm/redo0501.rdo
+2018-07-20T15:05:54.018769-03:00
+Archived Log entry 1009 added for T-1.S-509 ID 0x49b2613f LAD:1
+2018-07-20T15:05:54.023984-03:00
+Archived Log entry 1010 added for T-1.S-509 ID 0x49b2613f LAD:2
+2018-07-20T15:07:05.024040-03:00
+Resize operation completed for file# 279, old size 6646784K, new size 6650880K
+2018-07-20T15:10:14.957040-03:00
+Completed checkpoint up to RBA [0x1fe.2.10], SCN: 485665892892
+2018-07-20T15:13:07.476489-03:00
+Error 2396 trapped in 2PC on transaction 36.5.629682. Cleaning up.
+Error in cleaning up 2PC subordinates; error stack:
+ORA-01012: log-on não estabelecido
+ORA-02063: precedendo line a partir de TSE_NOVO
+ORA-02396: tempo inativo máximo excedido; conecte-se novamente
+ORA-02063: precedendo line a partir de TSE_NOVO
+ORA-02051: Outra sessão ou ramificação na mesma transação falhou ou foi finalizada
+ORA-02063: precedendo line a partir de TSE
+DISTRIB TRAN ADM.f3402b94.36.5.629682
+Error received from TSE_NOVO
+Error stack returned to user:
+ORA-02396: tempo inativo máximo excedido; conecte-se novamente
+ORA-02063: precedendo line a partir de TSE_NOVO
+ORA-02051: Outra sessão ou ramificação na mesma transação falhou ou foi finalizada
+ORA-02063: precedendo line a partir de TSE
+
+2018-07-20T15:16:36.224500-03:00
+Resize operation completed for file# 298, old size 6912K, new size 7168K
+Resize operation completed for file# 298, old size 7168K, new size 7424K
+2018-07-20T15:16:37.221236-03:00
+Resize operation completed for file# 298, old size 7424K, new size 8448K
+2018-07-20T15:18:27.712587-03:00
+Resize operation completed for file# 298, old size 8448K, new size 8704K
+Resize operation completed for file# 298, old size 8704K, new size 8960K
+2018-07-20T15:18:27.933000-03:00
+Resize operation completed for file# 298, old size 8960K, new size 9984K
+2018-07-20T15:19:06.364870-03:00
+Resize operation completed for file# 299, old size 2048K, new size 2304K
+Resize operation completed for file# 299, old size 2304K, new size 2560K
+2018-07-20T15:19:06.666950-03:00
+Resize operation completed for file# 299, old size 2560K, new size 2816K
+2018-07-20T15:19:06.860171-03:00
+Resize operation completed for file# 299, old size 2816K, new size 3840K
+2018-07-20T15:21:54.499438-03:00
+Resize operation completed for file# 316, old size 37248K, new size 37376K
+Resize operation completed for file# 316, old size 37376K, new size 37504K
+2018-07-20T15:21:55.447978-03:00
+Resize operation completed for file# 316, old size 37504K, new size 39424K
+2018-07-20T16:09:31.949712-03:00
+WARNING: inbound connection timed out (ORA-3136)
+2018-07-20T16:17:11.157573-03:00
+Resize operation completed for file# 328, old size 167680K, new size 168704K
+2018-07-20T16:32:41.924562-03:00
+Error 2396 trapped in 2PC on transaction 18.12.1339612. Cleaning up.
+Error in cleaning up 2PC subordinates; error stack:
+ORA-01012: log-on não estabelecido
+ORA-02063: precedendo line a partir de TSE_NOVO
+ORA-02396: tempo inativo máximo excedido; conecte-se novamente
+ORA-02063: precedendo line a partir de TSE_NOVO
+ORA-02051: Outra sessão ou ramificação na mesma transação falhou ou foi finalizada
+ORA-02063: precedendo line a partir de TSE
+DISTRIB TRAN ADM.f3402b94.18.12.1339612
+Error received from TSE_NOVO
+Error stack returned to user:
+ORA-02396: tempo inativo máximo excedido; conecte-se novamente
+ORA-02063: precedendo line a partir de TSE_NOVO
+ORA-02051: Outra sessão ou ramificação na mesma transação falhou ou foi finalizada
+ORA-02063: precedendo line a partir de TSE
+
+2018-07-20T16:38:05.669252-03:00
+Beginning log switch checkpoint up to RBA [0x1ff.2.10], SCN: 485683166022
+2018-07-20T16:38:05.669545-03:00
+Thread 1 advanced to log sequence 511 (LGWR switch)
+  Current log# 1 seq# 511 mem# 0: /ora01/oradata/adm/adm/redo0101.rdo
+  Current log# 1 seq# 511 mem# 1: /ora01/oradata/adm/adm/redo0102.rdo
+2018-07-20T16:38:49.109759-03:00
+Archived Log entry 1011 added for T-1.S-510 ID 0x49b2613f LAD:1
+2018-07-20T16:38:49.111617-03:00
+Archived Log entry 1012 added for T-1.S-510 ID 0x49b2613f LAD:2
+2018-07-20T16:43:13.052598-03:00
+Completed checkpoint up to RBA [0x1ff.2.10], SCN: 485683166022
+2018-07-20T16:57:15.029911-03:00
+Resize operation completed for file# 326, old size 7442432K, new size 7446528K
