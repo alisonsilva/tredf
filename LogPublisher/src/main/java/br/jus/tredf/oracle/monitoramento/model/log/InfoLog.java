@@ -1,4 +1,4 @@
-package br.jus.tredf.oracle.monitoramento.model;
+package br.jus.tredf.oracle.monitoramento.model.log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class InfoLog {
+import br.jus.tredf.oracle.monitoramento.model.IMensagem;
+
+public class InfoLog implements IMensagem {
 	public static final int CUMPRIMENTO_DATA = 19;
 	
 	public Date data;
@@ -20,7 +22,7 @@ public class InfoLog {
 	 */
 	public static Date checkDateFormat(String date) {
 		if(date != null && date.length() >= CUMPRIMENTO_DATA) {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 			Date dt = null;
 			try {
 				dt = sdf.parse(date);
@@ -48,4 +50,10 @@ public class InfoLog {
 		}
 		return null;
 	}
+
+	@Override
+	public Date getDate() {
+		return data;
+	}
+	
 }

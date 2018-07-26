@@ -1,4 +1,4 @@
-package br.jus.tredf.oracle.monitoramento.model;
+package br.jus.tredf.oracle.monitoramento.model.log;
 
 public class OraCode {
 	public String oraCode;
