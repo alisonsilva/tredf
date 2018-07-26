@@ -82,7 +82,7 @@ public class OracleLogPublisher {
 					if(ft.isDone()) {
 						info.data = new Date();
 						System.out.println(info);
-						sendMessage(info, LogPublisherProperties.getInstance().getProperty("oracle_homologacao_filespace"));	
+						sendMessage(info, LogPublisherProperties.getInstance().getProperty("kafka.topic.filespace.name"));	
 						System.exit(0);
 					}
 				}
