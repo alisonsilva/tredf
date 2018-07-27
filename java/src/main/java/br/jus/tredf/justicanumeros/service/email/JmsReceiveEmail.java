@@ -13,6 +13,7 @@ import javax.mail.internet.MimeMessage;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
@@ -30,24 +31,32 @@ public class JmsReceiveEmail {
 
 	@Autowired
 	private PropertiesServiceController properties;
+	
+	@Value("${smtp.autenticacao}")
+	private String smtpAutenticacao;
+	
+	@Value("${smtp.server}")
+	private String smtpServer;
+	
+	@Value("${smtp.port}")
+	private String smtpPort;
+	
+	@Value("${usuario.smtp}")
+	private String smtpUsuario;
+	
+	@Value("${senha.smtp}")
+	private String smtpSenha;
 
 	@JmsListener(destination = QUEUE_EMAIL)
 	private void receiveMessage(final Message<MailMessage> messageQueue) {
 		MailMessage message = messageQueue.getPayload();
 		try {
-
-			String smtpAutenticado = properties.getProperty("smtp.autenticacao");
-			String smtpServer = properties.getProperty("smtp.server");
-			String smtpPort = properties.getProperty("smtp.port");
-			String smtpUser = properties.getProperty("usuario.smtp");
-			String smtpSenha = properties.getProperty("senha.smtp");
-
 			Properties prps = new Properties();
 			SMTPAuthenticator auth = null;
 
-			if (smtpAutenticado.equalsIgnoreCase("true")) {
+			if (smtpAutenticacao.equalsIgnoreCase("true")) {
 				prps.put("mail.smtp.auth", true);
-				prps.put("mail.smtp.user", smtpUser);
+				prps.put("mail.smtp.user", smtpUsuario);
 				prps.put("mail.smtp.password", smtpSenha);
 				auth = new SMTPAuthenticator();
 			} else {
@@ -84,9 +93,7 @@ public class JmsReceiveEmail {
 
 	private class SMTPAuthenticator extends javax.mail.Authenticator {
 		public PasswordAuthentication getPasswordAuthentication() {
-			String username = properties.getProperty("usuario.smtp");
-			String password = properties.getProperty("senha.smtp");
-			return new PasswordAuthentication(username, password);
+			return new PasswordAuthentication(smtpUsuario, smtpSenha);
 		}
 	}
 }

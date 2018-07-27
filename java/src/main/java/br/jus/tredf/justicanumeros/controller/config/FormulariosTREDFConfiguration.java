@@ -8,10 +8,12 @@ import javax.jms.ConnectionFactory;
 
 import org.apache.activemq.spring.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
@@ -23,14 +25,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
-import br.jus.tredf.justicanumeros.util.PropertiesServiceController;
-
 @Configuration
 @EnableWebMvc
 @EnableJms
 @EnableScheduling
 @ComponentScan(basePackages="br.jus.tredf.justicanumeros")
-@PropertySource("classpath:formstredf.properties")
+@PropertySources({
+		@PropertySource( "classpath:formstredf.properties"),
+		@PropertySource( "classpath:envtredf.properties")
+		})
 public class FormulariosTREDFConfiguration extends WebMvcConfigurerAdapter {
 	public static final String DEFAULT_SAO_ARQUIVO_EXECUCAO_QUEUE = "qSaoArquivoExecucao";
 	public static final String DEFAULT_SAO_ARQUIVO_DOTACAO_QUEUE = "qSaoArquivoDotacao";
@@ -41,7 +44,16 @@ public class FormulariosTREDFConfiguration extends WebMvcConfigurerAdapter {
   @Autowired
   ConnectionFactory connectionFactory;
 	
+	@Value("${jdbc.url}")
+	private String jdbcUrl;
 	
+	@Value("${jdbc.usuario}")
+	private String jdbcUsuario;
+	
+	@Value("${jdbc.senha}")
+	private String jdbcSenha;
+	
+  
   public @Bean ResourceBundle bundle() {
     Locale locale = new Locale("pt", "BR");
     ResourceBundle bundle = ResourceBundle.getBundle("negocio_msgs", locale);
@@ -83,9 +95,9 @@ public class FormulariosTREDFConfiguration extends WebMvcConfigurerAdapter {
   public @Bean ComboPooledDataSource dataSource() throws Exception {
     ComboPooledDataSource combo = new ComboPooledDataSource();
     combo.setDriverClass("oracle.jdbc.driver.OracleDriver");
-    combo.setJdbcUrl(PropertiesServiceController.getInstance().getProperty("jdbc.url"));
-    combo.setUser(PropertiesServiceController.getInstance().getProperty("jdbc.usuario"));
-    combo.setPassword(PropertiesServiceController.getInstance().getProperty("jdbc.senha"));
+    combo.setJdbcUrl(jdbcUrl);
+    combo.setUser(jdbcUsuario);
+    combo.setPassword(jdbcSenha);
     
     combo.setMinPoolSize(5);
     combo.setMaxPoolSize(10);

@@ -20,6 +20,7 @@ import javax.naming.ldap.PagedResultsControl;
 import javax.naming.ldap.PagedResultsResponseControl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 
@@ -43,18 +44,31 @@ public class ActiveDirectoryDao extends AutenticacaoCorporativa implements Seria
 
 	@Autowired private PropertiesServiceController propertiesServiceController;
 
-	private boolean autenticarAd = false;
-	
 	private InitialLdapContext ADContext;
 	
+	@Value("${ldap.activedirectory.host}")
 	private String host;
+	
+	@Value("${ldap.activedirectory.dominio}")
 	private String dominio;
+	
+	@Value("${ldap.activedirectory.porta}")
 	private String porta;
+	
+	@Value("${ldap.activedirectory.sldapjks}")
 	private String jks;
+	
+	@Value("${ldap.activedirectory.sldapporta}")
 	private String portS;
 	
+	@Value("${ldap.activedirectory.senha}")
 	private String senhaConsultaAD;
+	
+	@Value("${ldap.activedirectory.usuario}")
 	private String usuarioConsultaAD;
+	
+	@Value("${ldap.activedirectory.ativo}")
+	private Boolean flagAutenticaAd;
 	
 	public static ActiveDirectoryDao getInstance() {
 		if(AD_SERVICE == null) {
@@ -70,20 +84,6 @@ public class ActiveDirectoryDao extends AutenticacaoCorporativa implements Seria
 			if (propertiesServiceController == null) {
 				propertiesServiceController = PropertiesServiceController.getInstance();
 			}
-			
-			String autenticaAD = propertiesServiceController.getProperty("ldap.activedirectory.ativo");
-			if(autenticaAD.equalsIgnoreCase("TRUE")) {
-				autenticarAd = true;
-				
-				host = propertiesServiceController.getProperty("ldap.activedirectory.host");
-				dominio = propertiesServiceController.getProperty("ldap.activedirectory.dominio");
-				porta = propertiesServiceController.getProperty("ldap.activedirectory.porta");
-				jks = propertiesServiceController.getProperty("ldap.activedirectory.sldapjks");
-				portS = propertiesServiceController.getProperty("ldap.activedirectory.sldapporta");
-				usuarioConsultaAD = propertiesServiceController.getProperty("ldap.activedirectory.usuario");
-				senhaConsultaAD = propertiesServiceController.getProperty("ldap.activedirectory.senha");
-			}		
-			
 		} catch(Exception e) {	
 			e.printStackTrace();
 		}		
@@ -92,7 +92,7 @@ public class ActiveDirectoryDao extends AutenticacaoCorporativa implements Seria
 	
 	@Override
 	public boolean autenticacaoCorporativa() {
-		return autenticarAd;
+		return flagAutenticaAd;
 	}
 	
 	/**
@@ -103,7 +103,7 @@ public class ActiveDirectoryDao extends AutenticacaoCorporativa implements Seria
 	 */
 	@Override
 	public InitialLdapContext loginDominio(String login, String senha) {
-		if (!autenticarAd) {
+		if (!flagAutenticaAd) {
 			throw new ParametroException("Não é necessário autenticar Active Directory");
 		}
 		InitialLdapContext context = null;
