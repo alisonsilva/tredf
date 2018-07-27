@@ -1,21 +1,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion> 
 
 	<groupId>br.jus.tredf.oracle.monitoramento</groupId>
-	<artifactId>LogPublisher</artifactId>
+	<artifactId>LogPublisher</artifactId> 
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>LogPublisher</name>
-	<url>http://maven.apache.org</url>
+	<name>LogPublisher</name> 
+	<url>http://maven.apache.org</url> 
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
-	<dependencies>
+	<dependencies> 
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
 			<artifactId>kafka-clients</artifactId>
@@ -33,7 +35,7 @@
 		</dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
+      <artifactId>gson</artifactId> 
       <version>1.7.1</version>
     </dependency>		
 
@@ -44,4 +46,18 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.4</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<finalName>log_publisher</finalName>
+	</build>	
 </project>

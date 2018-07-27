@@ -47,9 +47,14 @@ public class OracleLogPublisher {
 			logger.error("(OracleLogPublisher.main) Erro recuperando referência ao zookeeper ou ao kafka: " + e.getMessage());
 			return;
 		}
-		//runProducer();
-		//runFileMoving();
+		runProducer();
+		runFileMoving();
 		runFileSpacingCheck();
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e1) {
+		}
+		System.exit(0);
 	}
 	
 	static void runFileSpacingCheck() {
@@ -64,7 +69,7 @@ public class OracleLogPublisher {
 					public void accept(String t) {
 						if(!t.startsWith("/")) {
 							String[] row = t.split("\\s+");
-							if(row[0].trim().length() == 0) {
+							if(row.length < 7 && row[1] != null && row[1].trim().length() > 0) {
 								info.rows.add(new InfoRow(row[1], row[2], row[3], row[4], row[5]));
 							}
 						}
@@ -81,9 +86,8 @@ public class OracleLogPublisher {
 					Executors.newSingleThreadExecutor().shutdownNow();
 					if(ft.isDone()) {
 						info.data = new Date();
-						System.out.println(info);
+						
 						sendMessage(info, LogPublisherProperties.getInstance().getProperty("kafka.topic.filespace.name"));	
-						System.exit(0);
 					}
 				}
 				
@@ -155,7 +159,7 @@ public class OracleLogPublisher {
 	static void runProducer() {
 		String ultimaLinha = null;
 		String fileName = null;
-	  int ultimaLn = -1;
+		int ultimaLn = -1;
 		try {
 			ultimaLinha = zkmanager.getZNodeData(LogPublisherProperties.getInstance().getProperty("zookeeper.dir.ponteiro"), true);
 			fileName = LogPublisherProperties.getInstance().getProperty("logfile.name");
